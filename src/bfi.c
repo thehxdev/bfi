@@ -121,7 +121,7 @@ int bf_execute(BF_State *bfp) {
     while (bfp->cmds[cptr]) {
         switch (bfp->cmds[cptr]) {
             case '?':
-                /* non-standard brainf*ck command 
+                /* non-standard brainf*ck command.
                  * used to clear every thing and reset
                  * data pointer */
                 memset(bfp->arr, 0, __BF_ARR_CAP);
