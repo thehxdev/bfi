@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.1...3.28)
 
 project(
   bfi
-  VERSION 0.0.1
+  VERSION 1.0.0
   LANGUAGES C)
 
 
@@ -30,4 +30,3 @@ set(SRC_FILES
     ${SRC_DIR}/bfi.c
 )
 add_executable(bfi ${SRC_FILES})
-# target_include_directories(cap PRIVATE "./include")
