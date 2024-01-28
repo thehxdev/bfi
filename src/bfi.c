@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "bfi.h"
 
 
@@ -12,6 +13,7 @@ static size_t __bf_source_file_cmds_count(FILE *fp) {
 
     while ((ch = fgetc(fp)) != EOF) {
         switch (ch) {
+            case '?':
             case '>':
             case '<':
             case '+':
@@ -41,6 +43,7 @@ static int __bf_read_source(BF_State *bfp, const char *path) {
 
     while ((ch = fgetc(fp)) != EOF) {
         switch (ch) {
+            case '?':
             case '>':
             case '<':
             case '+':
@@ -117,6 +120,14 @@ int bf_execute(BF_State *bfp) {
 
     while (bfp->cmds[cptr]) {
         switch (bfp->cmds[cptr]) {
+            case '?':
+                /* non-standard brainf*ck command 
+                 * used to clear every thing and reset
+                 * data pointer */
+                memset(bfp->arr, 0, __BF_ARR_CAP);
+                bfp->dptr = 0;
+                cptr += 1;
+                break;
             case '>':
                 bfp->dptr += 1; cptr += 1; break;
             case '<':

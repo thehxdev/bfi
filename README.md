@@ -45,3 +45,4 @@ BrainF\*ck has only 8 commands:
 - `,` : accept one byte of input and store it in data pointer
 - `[` : jump to next command of matching `]`, if the data pointer's data is zero
 - `]` : jump to next command of matching `[` (goes backward), if the data pointer's data is non-zero
+- `?` : reset every thing to initial state (set all data to 0 and rewind data pointer). This is a **non-standard** BrainF\*ck command
