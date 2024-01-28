@@ -4,6 +4,10 @@ BFI is a BrainF\*ck language interpreter written in C and compatible with C99 st
 
 For more information about BrainF\*ck read the [BrainF\*ck wikipedia page](https://en.wikipedia.org/wiki/Brainfuck).
 
+You can find more complex and interesting examples in [brainfuck.org](https://brainfuck.org) website. download `*.b` source files
+and execute them with BFI.
+
+
 ## Build
 First clone the source code using git.
 ```bash
