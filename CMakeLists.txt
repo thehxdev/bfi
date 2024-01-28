@@ -23,7 +23,7 @@ if(CMAKE_EXPORT_COMPILE_COMMANDS)
 endif()
 
 
-# Library
+# BFI
 set(SRC_DIR "./src")
 set(SRC_FILES
     ${SRC_DIR}/main.c
