@@ -43,5 +43,5 @@ BrainF\*ck has only 8 commands:
 - `-` : decrement byte at the data pointer by one
 - `.` : output the data at data pointer
 - `,` : accept one byte of input and store it in data pointer
-- `[` : jump to previous command of matching `]`, if the data pointer's data is zero
-- `]` : jump to next command of matching `[`, if the data pointer's data is non-zero
+- `[` : jump to next command of matching `]`, if the data pointer's data is zero
+- `]` : jump to next command of matching `[` (goes backward), if the data pointer's data is non-zero
