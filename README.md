@@ -35,7 +35,7 @@ if you are in the project root directory:
 ```
 
 `bfi` ignores all characters that are not a valid BrainF\*ck command.
-BrainF\*ck has only 8 commands:
+BrainF\*ck has only 8 commands (Here is 9 because I added `?` myself):
 
 - `>` : increment data pointer by one
 - `<` : decrement data pointer by one
