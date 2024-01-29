@@ -46,7 +46,7 @@ typedef struct __bf_state {
     /* data pointer location */
     size_t dptr;
 
-    /* BF commands that came from a source file or command-line arg */
+    /* BF commands that read from a source file */
     char *cmds;
 
     /* count of BF commands */
@@ -62,6 +62,7 @@ BF_State *bf_init(const char *s_path);
 void bf_deinit(BF_State **bfp);
 
 
+/* execute BF commands */
 int bf_execute(BF_State *bfp);
 
 #endif /* BFI_BFI_H */

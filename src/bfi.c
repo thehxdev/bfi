@@ -70,6 +70,38 @@ static int __bf_read_source(BF_State *bfp, const char *path) {
 }
 
 
+/* check all brackets and if there are non-matching ones,
+ * report error message and exit */
+static void __bf_check_matching_brackets(BF_State *bfp) {
+    char c;
+    size_t i = 0;
+    size_t nest = 0;
+
+    while ((c = bfp->cmds[i])) {
+        if (c == '[') {
+            nest += 1;
+        } else if (c == ']' && nest == 0) {
+            BF_LOG_ERR("extra \']\' command found");
+            bf_deinit(&bfp);
+            exit(0);
+        } else if (c == ']' && nest > 0) {
+            nest -= 1;
+        }
+
+        i += 1;
+    }
+
+    /* if all commands are checked and
+     * nesting is greater than 0, indicates
+     * extra `[` character are used */
+    if (nest > 0) {
+        BF_LOG_ERR("extra \'[\' commands found");
+        bf_deinit(&bfp);
+        exit(0);
+    }
+}
+
+
 BF_State *bf_init(const char *s_path) {
     BF_State *bfs = (BF_State*) malloc(sizeof(BF_State));
     if (!bfs)
@@ -85,6 +117,7 @@ BF_State *bf_init(const char *s_path) {
     bfs->dptr = 0;
     bfs->cmds_c = 0;
     __bf_read_source(bfs, s_path);
+    __bf_check_matching_brackets(bfs);
     return bfs;
 }
 
@@ -141,7 +174,7 @@ int bf_execute(BF_State *bfp) {
 #ifdef NON_STD_CMDS
             case '?':
                 /* non-standard brainf*ck command.
-                 * used to clear every thing and reset
+                 * used to clear everything and reset
                  * data pointer */
                 memset(bfp->arr, 0, __BF_ARR_CAP);
                 bfp->dptr = 0;
