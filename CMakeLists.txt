@@ -30,3 +30,8 @@ set(SRC_FILES
     ${SRC_DIR}/bfi.c
 )
 add_executable(bfi ${SRC_FILES})
+if (NON_STD_CMDS)
+    target_compile_definitions(bfi PUBLIC NON_STD_CMDS)
+endif()
+
+

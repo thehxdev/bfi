@@ -13,7 +13,9 @@ static size_t __bf_source_file_cmds_count(FILE *fp) {
 
     while ((ch = fgetc(fp)) != EOF) {
         switch (ch) {
+#ifdef NON_STD_CMDS
             case '?':
+#endif /* NON_STD_CMDS */
             case '>':
             case '<':
             case '+':
@@ -49,7 +51,9 @@ static int __bf_read_source(BF_State *bfp, const char *path) {
 
     while ((ch = fgetc(fp)) != EOF) {
         switch (ch) {
+#ifdef NON_STD_CMDS
             case '?':
+#endif /* NON_STD_CMDS */
             case '>':
             case '<':
             case '+':
@@ -134,6 +138,7 @@ int bf_execute(BF_State *bfp) {
 
     while (bfp->cmds[cptr]) {
         switch (bfp->cmds[cptr]) {
+#ifdef NON_STD_CMDS
             case '?':
                 /* non-standard brainf*ck command.
                  * used to clear every thing and reset
@@ -142,6 +147,7 @@ int bf_execute(BF_State *bfp) {
                 bfp->dptr = 0;
                 cptr += 1;
                 break;
+#endif /* NON_STD_CMDS */
             case '>':
                 bfp->dptr += 1; cptr += 1; break;
             case '<':
