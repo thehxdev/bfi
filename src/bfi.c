@@ -39,7 +39,13 @@ static int __bf_read_source(BF_State *bfp, const char *path) {
     if (!fp)
         return 1;
 
-    bfp->cmds = (char*) calloc(__bf_source_file_cmds_count(fp) + 1, 1);
+    bfp->cmds_c = __bf_source_file_cmds_count(fp);
+    bfp->cmds = (char*) calloc(bfp->cmds_c + 1, 1);
+    if (!bfp->cmds) {
+        BF_LOG_ERR("Allocating memory for BF commands failed.");
+        bf_deinit(&bfp);
+        exit(1);
+    }
 
     while ((ch = fgetc(fp)) != EOF) {
         switch (ch) {
@@ -54,6 +60,7 @@ static int __bf_read_source(BF_State *bfp, const char *path) {
             case ']': bfp->cmds[i] = ch; i += 1; break;
         }
     }
+
     fclose(fp);
     return 0;
 }
@@ -65,7 +72,14 @@ BF_State *bf_init(const char *s_path) {
         return NULL;
 
     bfs->arr = (ubyte*) calloc(__BF_ARR_CAP, sizeof(ubyte));
+    if (!bfs->arr) {
+        BF_LOG_ERR("Allocating memory for BF data array failed");
+        free(bfs);
+        exit(1);
+    }
+
     bfs->dptr = 0;
+    bfs->cmds_c = 0;
     __bf_read_source(bfs, s_path);
     return bfs;
 }
@@ -82,7 +96,7 @@ void bf_deinit(BF_State **bfp) {
 
 
 /* seek to matching closing bracket */
-static void seek_to_closing_bracket(BF_State *bfp, size_t *cptr) {
+static void seek_to_closing_bracket(BF_State *bfp, int *cptr) {
     int nest = 0;
     while (bfp->cmds[*cptr]) {
         if (bfp->cmds[*cptr] == '[') {
@@ -98,7 +112,7 @@ static void seek_to_closing_bracket(BF_State *bfp, size_t *cptr) {
 
 
 /* seek to matching opening bracket */
-static void seek_to_opening_bracket(BF_State *bfp, size_t *cptr) {
+static void seek_to_opening_bracket(BF_State *bfp, int *cptr) {
     int nest = 0;
     while (bfp->cmds[*cptr]) {
         if (bfp->cmds[*cptr] == ']') {
@@ -114,7 +128,7 @@ static void seek_to_opening_bracket(BF_State *bfp, size_t *cptr) {
 
 
 int bf_execute(BF_State *bfp) {
-    size_t cptr = 0;
+    int cptr = 0;
     if (!bfp->cmds)
         return 1;
 

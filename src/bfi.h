@@ -16,9 +16,13 @@
 # define ubyte unsigned char
 #endif /* byte */
 
-#define check_then_free(p) if((p)) free((p))
+#define check_then_free(p) if((p)) { free((p)); (p) = NULL; }
 
 #define DEINIT_BF_END __attribute__((cleanup(bf_deinit)))
+
+#define BF_LOG_ERR(msg) do {            \
+    fprintf(stderr, "[ERROR] %s\n", msg); \
+} while(0)
 
 
 /* BF Commands:
@@ -42,6 +46,9 @@ typedef struct __bf_state {
 
     /* BF commands that came from a source file or command-line arg */
     char *cmds;
+
+    /* count of BF commands */
+    size_t cmds_c;
 } BF_State;
 
 
