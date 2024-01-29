@@ -83,7 +83,7 @@ static void __bf_check_matching_brackets(BF_State *bfp) {
         } else if (c == ']' && nest == 0) {
             BF_LOG_ERR("extra \']\' command found");
             bf_deinit(&bfp);
-            exit(0);
+            exit(1);
         } else if (c == ']' && nest > 0) {
             nest -= 1;
         }
@@ -97,7 +97,7 @@ static void __bf_check_matching_brackets(BF_State *bfp) {
     if (nest > 0) {
         BF_LOG_ERR("extra \'[\' commands found");
         bf_deinit(&bfp);
-        exit(0);
+        exit(1);
     }
 }
 
