@@ -19,7 +19,14 @@ cd bfi
 Make sure that you have a C compiler like `gcc` or `clang`, `cmake` and `make` installed.
 ```bash
 mkdir -p build/
-cmake -DOPTIMIZE=1 -B build/ -S .
+
+# You can set `-DNON_STANDARD_CMDS` to 1 if you want
+# the commands I personaly added to `bfi` like `?` command.
+# otherwise `bfi` acts like a standard BrainF*ck interpreter
+# with no extra commands.
+#
+# To compile with debug information, set `-DOPTIMIZE` to 0.
+cmake -DNON_STANDARD_CMDS=0 -DOPTIMIZE=1 -B build/ -S .
 
 cd build/
 cmake --build .
@@ -38,8 +45,7 @@ if you are in the project root directory:
 ./build/bfi 'examples/HelloWorld.bf'
 ```
 
-`bfi` ignores all characters that are not a valid BrainF\*ck command.
-BrainF\*ck has only 8 commands (Here is 9 because I added `?` myself):
+`bfi` ignores all characters that are not a valid BrainF\*ck command. BrainF\*ck has only 8 commands:
 
 - `>` : increment data pointer by one
 - `<` : decrement data pointer by one
@@ -49,4 +55,9 @@ BrainF\*ck has only 8 commands (Here is 9 because I added `?` myself):
 - `,` : accept one byte of input and store it in data pointer
 - `[` : jump to next command of matching `]`, if the data pointer's data is zero
 - `]` : jump to next command of matching `[` (goes backward), if the data pointer's data is non-zero
-- `?` : reset every thing to initial state (set all data to 0 and rewind data pointer). This is a **non-standard** BrainF\*ck command
+
+
+If you bulid `bfi` with `-DNON_STANDARD_CMDS=1` flag (see Build section), you have access to more commands
+that I personaly added to `bfi`:
+
+- `?` : reset everything to initial state (set all data to 0 and rewind data pointer).
