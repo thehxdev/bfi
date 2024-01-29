@@ -23,10 +23,8 @@
                 valgrind
             ];
 
-            shellHook = ''
-            mkdir -p build/
-            CC=clang cmake -DOPTIMIZE=1 -B build/ -S .
-            '';
+            # shellHook = ''
+            # '';
         };
     };
 }
