@@ -34,7 +34,7 @@ static size_t __bf_source_file_cmds_count(FILE *fp) {
 
 /* read a BF source file, remove any unnecessary character
  * and store commands in BF_State */
-static int __bf_read_source(BF_State *bfp, const char *path) {
+static int __bf_read_source_file(BF_State *bfp, const char *path) {
     char ch;
     size_t i = 0;
     FILE *fp = fopen(path, "rb");
@@ -116,7 +116,7 @@ BF_State *bf_init(const char *s_path) {
 
     bfs->dptr = 0;
     bfs->cmds_c = 0;
-    __bf_read_source(bfs, s_path);
+    __bf_read_source_file(bfs, s_path);
     __bf_check_matching_brackets(bfs);
     return bfs;
 }
@@ -133,7 +133,7 @@ void bf_deinit(BF_State **bfp) {
 
 
 /* seek to matching closing bracket */
-static void seek_to_closing_bracket(BF_State *bfp, int *cptr) {
+static void __bf_seek_to_closing_bracket(BF_State *bfp, int *cptr) {
     int nest = 0;
     while (bfp->cmds[*cptr]) {
         if (bfp->cmds[*cptr] == '[') {
@@ -149,7 +149,7 @@ static void seek_to_closing_bracket(BF_State *bfp, int *cptr) {
 
 
 /* seek to matching opening bracket */
-static void seek_to_opening_bracket(BF_State *bfp, int *cptr) {
+static void __bf_seek_to_opening_bracket(BF_State *bfp, int *cptr) {
     int nest = 0;
     while (bfp->cmds[*cptr]) {
         if (bfp->cmds[*cptr] == ']') {
@@ -207,7 +207,7 @@ int bf_execute(BF_State *bfp) {
             case '[':
                 if (bfp->arr[bfp->dptr] == 0) {
                     cptr += 1; /* skip current '[' */
-                    seek_to_closing_bracket(bfp, &cptr);
+                    __bf_seek_to_closing_bracket(bfp, &cptr);
                     cptr += 1; /* skip ']' */
                 } else {
                     cptr += 1;
@@ -217,7 +217,7 @@ int bf_execute(BF_State *bfp) {
             case ']':
                 if (bfp->arr[bfp->dptr] != 0) {
                     cptr -= 1; /* skip current ']' */
-                    seek_to_opening_bracket(bfp, &cptr);
+                    __bf_seek_to_opening_bracket(bfp, &cptr);
                     cptr += 1; /* skip '[' */
                 } else {
                     cptr += 1;
