@@ -21,7 +21,7 @@ Make sure that you have a C compiler like `gcc` or `clang`, `cmake` and `make` i
 mkdir -p build/
 
 # You can set `-DNON_STANDARD_CMDS` to 1 if you want
-# the commands I personaly added to `bfi` like `?` command.
+# the commands that I added to `bfi` like `?` command.
 # otherwise `bfi` acts like a standard BrainF*ck interpreter
 # with no extra commands.
 #
@@ -58,6 +58,6 @@ if you are in the project root directory:
 
 
 If you bulid `bfi` with `-DNON_STANDARD_CMDS=1` flag (see Build section), you have access to more commands
-that I personaly added to `bfi`:
+that I added to `bfi`:
 
 - `?` : reset everything to initial state (set all data to 0 and rewind data pointer).
