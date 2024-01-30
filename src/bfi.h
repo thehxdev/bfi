@@ -44,7 +44,7 @@ typedef struct __bf_state {
     ubyte *arr;
 
     /* data pointer location */
-    size_t dptr;
+    long dptr;
 
     /* BF commands that read from a source file */
     char *cmds;

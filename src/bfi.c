@@ -70,8 +70,8 @@ static int __bf_read_source(BF_State *bfp, const char *path) {
 }
 
 
-/* check all brackets and if there are non-matching ones,
- * report error message and exit */
+/* check all brackets before execution and if there are
+ * non-matching ones, report error and exit */
 static void __bf_check_matching_brackets(BF_State *bfp) {
     char c;
     size_t i = 0;
@@ -181,40 +181,54 @@ int bf_execute(BF_State *bfp) {
                 cptr += 1;
                 break;
 #endif /* NON_STD_CMDS */
+
             case '>':
                 bfp->dptr += 1; cptr += 1; break;
+
             case '<':
                 bfp->dptr -= 1; cptr += 1; break;
+
             case '+':
                 bfp->arr[bfp->dptr] += 1; cptr += 1; break;
+
             case '-':
                 bfp->arr[bfp->dptr] -= 1; cptr += 1; break;
+
             case '.':
                 putc(bfp->arr[bfp->dptr], stdout);
                 cptr += 1;
                 break;
+
             case ',':
                 scanf("%c", &bfp->arr[bfp->dptr]);
                 cptr += 1;
                 break;
+
             case '[':
                 if (bfp->arr[bfp->dptr] == 0) {
-                    cptr += 1;
+                    cptr += 1; /* skip current '[' */
                     seek_to_closing_bracket(bfp, &cptr);
                     cptr += 1; /* skip ']' */
                 } else {
                     cptr += 1;
                 }
                 break;
+
             case ']':
                 if (bfp->arr[bfp->dptr] != 0) {
-                    cptr -= 1;
+                    cptr -= 1; /* skip current ']' */
                     seek_to_opening_bracket(bfp, &cptr);
                     cptr += 1; /* skip '[' */
                 } else {
                     cptr += 1;
                 }
                 break;
+        }
+
+        if (bfp->dptr < 0) {
+            BF_LOG_ERR("Out of bound access in data array.");
+            bf_deinit(&bfp);
+            exit(1);
         }
     }
 
