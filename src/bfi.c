@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "bfi.h"
+#include "scanner.h"
 
 
 /* count the commands in a source file */
@@ -38,8 +39,11 @@ static int __bf_read_source_file(BF_State *bfp, const char *path) {
     char ch;
     size_t i = 0;
     FILE *fp = fopen(path, "rb");
-    if (!fp)
-        return 1;
+    if (!fp) {
+        BF_LOG_ERR("source file not found.");
+        bf_deinit(&bfp);
+        exit(1);
+    }
 
     bfp->cmds_c = __bf_source_file_cmds_count(fp);
     bfp->cmds = (char*) calloc(bfp->cmds_c + 1, 1);
@@ -116,8 +120,25 @@ BF_State *bf_init(const char *s_path) {
 
     bfs->dptr = 0;
     bfs->cmds_c = 0;
+
+    /* read the source file, removed any unnecessary character
+     * and store commands to bfs->cmds */
     __bf_read_source_file(bfs, s_path);
+
     __bf_check_matching_brackets(bfs);
+
+    /* tokenize the commands */
+    bfs->tl = __bf_scanner_scan_cmds(bfs->cmds, bfs->cmds_c);
+    if (!bfs->tl) {
+        BF_LOG_ERR("Scanning BF commands failed");
+        bf_deinit(&bfs);
+        exit(1);
+    }
+
+    /* after scanning commands to tokens, we don't need
+     * them anymore */
+    free(bfs->cmds);
+    bfs->cmds = NULL;
     return bfs;
 }
 
@@ -125,90 +146,52 @@ BF_State *bf_init(const char *s_path) {
 void bf_deinit(BF_State **bfp) {
     BF_State *tmp = *bfp;
     if (tmp) {
-        check_then_free(tmp->cmds);
-        check_then_free(tmp->arr);
+        free(tmp->cmds);
+        free(tmp->arr);
+        __bf_tokenlist_free(tmp->tl);
         free(tmp);
     }
 }
 
 
-/* seek to matching closing bracket */
-static void __bf_seek_to_closing_bracket(BF_State *bfp, int *cptr) {
-    int nest = 0;
-    while (bfp->cmds[*cptr]) {
-        if (bfp->cmds[*cptr] == '[') {
-            nest += 1;
-        } else if (bfp->cmds[*cptr] == ']' && nest > 0) {
-            nest -= 1;
-        } else if (bfp->cmds[*cptr] == ']' && nest == 0)
-            break;
-
-        *cptr += 1;
-    }
-}
-
-
-/* seek to matching opening bracket */
-static void __bf_seek_to_opening_bracket(BF_State *bfp, int *cptr) {
-    int nest = 0;
-    while (bfp->cmds[*cptr]) {
-        if (bfp->cmds[*cptr] == ']') {
-            nest += 1;
-        } else if (bfp->cmds[*cptr] == '[' && nest > 0) {
-            nest -= 1;
-        } else if (bfp->cmds[*cptr] == '[' && nest == 0)
-            break;
-
-        *cptr -= 1;
-    }
-}
-
-
 int bf_execute(BF_State *bfp) {
-    int cptr = 0;
-    if (!bfp->cmds)
-        return 1;
+    long cptr = 0, i;
+    BF_TokenList *tl = bfp->tl;
+    BF_Token *t;
 
-    while (bfp->cmds[cptr]) {
-        switch (bfp->cmds[cptr]) {
-#ifdef NON_STD_CMDS
-            case '?':
-                /* non-standard brainf*ck command.
-                 * used to clear everything and reset
-                 * data pointer */
-                memset(bfp->arr, 0, __BF_ARR_CAP);
-                bfp->dptr = 0;
-                cptr += 1;
-                break;
-#endif /* NON_STD_CMDS */
+    while (cptr < (long)tl->len) {
+        t = __bf_tokenlist_get(tl, cptr);
 
+        switch (t->op) {
             case '>':
-                bfp->dptr += 1; cptr += 1; break;
+                bfp->dptr += t->repeat; cptr += 1; break;
 
             case '<':
-                bfp->dptr -= 1; cptr += 1; break;
+                bfp->dptr -= t->repeat; cptr += 1; break;
 
             case '+':
-                bfp->arr[bfp->dptr] += 1; cptr += 1; break;
+                bfp->arr[bfp->dptr] += t->repeat; cptr += 1; break;
 
             case '-':
-                bfp->arr[bfp->dptr] -= 1; cptr += 1; break;
+                bfp->arr[bfp->dptr] -= t->repeat; cptr += 1; break;
 
             case '.':
-                putc(bfp->arr[bfp->dptr], stdout);
+                for (i = 0; i < (long)t->repeat; i++)
+                    putc(bfp->arr[bfp->dptr], stdout);
                 cptr += 1;
                 break;
 
             case ',':
-                scanf("%c", &bfp->arr[bfp->dptr]);
+                for (i = 0; i < (long)t->repeat; i++)
+                    scanf("%c", &bfp->arr[bfp->dptr]);
                 cptr += 1;
                 break;
 
             case '[':
                 if (bfp->arr[bfp->dptr] == 0) {
-                    cptr += 1; /* skip current '[' */
-                    __bf_seek_to_closing_bracket(bfp, &cptr);
-                    cptr += 1; /* skip ']' */
+                    cptr += 1;
+                    while (tl->tokens[cptr]->lable != t->lable) cptr += 1;
+                    cptr += 1;
                 } else {
                     cptr += 1;
                 }
@@ -216,9 +199,9 @@ int bf_execute(BF_State *bfp) {
 
             case ']':
                 if (bfp->arr[bfp->dptr] != 0) {
-                    cptr -= 1; /* skip current ']' */
-                    __bf_seek_to_opening_bracket(bfp, &cptr);
-                    cptr += 1; /* skip '[' */
+                    cptr -= 1;
+                    while (tl->tokens[cptr]->lable != t->lable) cptr -= 1;
+                    cptr += 1;
                 } else {
                     cptr += 1;
                 }

@@ -1,12 +1,11 @@
 #ifndef BFI_BFI_H
 #define BFI_BFI_H
 
+#include <stddef.h> /* For size_t */
+#include "scanner.h"
+
+
 #define __BF_ARR_CAP (1<<16)
-
-
-#ifndef size_t
-# define size_t unsigned long
-#endif /* size_t */
 
 
 /* ubyte -> an unsigned 8 bit integer
@@ -27,18 +26,6 @@
 } while(0)
 
 
-/* BF Commands:
- * '>' | increment data pointer by one
- * '<' | decrement data pointer by one
- * '+' | increment byte at the data pointer by one
- * '-' | decrement byte at the data pointer by one
- * '.' | output the data at data pointer
- * ',' | accept one byte of input and store it in data pointer
- * '[' | jump to next command of matching `]`, if the data pointer's data is zero
- * ']' | jump to next command of matching `[` (goes backward), if the data pointer's data is non-zero
- */
-
-
 typedef struct __bf_state {
     /* data array */
     ubyte *arr;
@@ -51,6 +38,9 @@ typedef struct __bf_state {
 
     /* count of BF commands */
     size_t cmds_c;
+
+    /* a list of tokens */
+    BF_TokenList *tl;
 } BF_State;
 
 

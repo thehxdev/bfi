@@ -28,6 +28,8 @@ set(SRC_DIR "./src")
 set(SRC_FILES
     ${SRC_DIR}/main.c
     ${SRC_DIR}/bfi.c
+    ${SRC_DIR}/rand.c
+    ${SRC_DIR}/scanner.c
 )
 add_executable(bfi ${SRC_FILES})
 if (NON_STD_CMDS)
