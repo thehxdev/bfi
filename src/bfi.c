@@ -184,7 +184,7 @@ int bf_execute(BF_State *bfp) {
 
             case '.':
                 for (i = 0; i < (long)t->repeat; i++)
-                    putc(bfp->arr[bfp->dptr], stdout);
+                    fputc(bfp->arr[bfp->dptr], stdout);
                 cptr += 1;
                 break;
 
