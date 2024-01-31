@@ -163,6 +163,13 @@ int bf_execute(BF_State *bfp) {
         t = __bf_tokenlist_get(tl, cptr);
 
         switch (t->op) {
+#ifdef NON_STD_CMDS
+            case '?':
+                memset(bfp->arr, 0, __BF_ARR_CAP);
+                bfp->dptr = 0;
+                cptr += 1;
+                break;
+#endif /* NON_STD_CMDS */
             case '>':
                 bfp->dptr += t->repeat; cptr += 1; break;
 
