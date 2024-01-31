@@ -3,6 +3,7 @@
 #include <string.h>
 #include "bfi.h"
 #include "scanner.h"
+#include "xmem.h"
 
 
 /* count the commands in a source file */
@@ -114,7 +115,7 @@ BF_State *bf_init(const char *s_path) {
     bfs->arr = (ubyte*) calloc(__BF_ARR_CAP, sizeof(ubyte));
     if (!bfs->arr) {
         BF_LOG_ERR("Allocating memory for BF data array failed");
-        free(bfs);
+        xfree(bfs);
         exit(1);
     }
 
@@ -137,8 +138,7 @@ BF_State *bf_init(const char *s_path) {
 
     /* after scanning commands to tokens, we don't need
      * them anymore */
-    free(bfs->cmds);
-    bfs->cmds = NULL;
+    xfree(bfs->cmds);
     return bfs;
 }
 
@@ -146,10 +146,10 @@ BF_State *bf_init(const char *s_path) {
 void bf_deinit(BF_State **bfp) {
     BF_State *tmp = *bfp;
     if (tmp) {
-        free(tmp->cmds);
-        free(tmp->arr);
+        xfree(tmp->cmds);
+        xfree(tmp->arr);
         __bf_tokenlist_free(tmp->tl);
-        free(tmp);
+        xfree(tmp);
     }
 }
 

@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <memory.h>
 #include "scanner.h"
-#include "rand.h"
+#include "xmem.h"
 
 
 /* create a new token */
@@ -57,9 +57,9 @@ void __bf_tokenlist_free(BF_TokenList *bf_tlp) {
     if (bf_tlp) {
         if (bf_tlp->tokens)
             for (i = 0; i < bf_tlp->len; i++)
-                free(bf_tlp->tokens[i]);
-        free(bf_tlp->tokens);
-        free(bf_tlp);
+                xfree(bf_tlp->tokens[i]);
+        xfree(bf_tlp->tokens);
+        xfree(bf_tlp);
     }
 }
 
@@ -121,7 +121,7 @@ BF_TokenList *__bf_scanner_scan_cmds(const char *bf_cmds, const size_t len) {
         }
 
         __bf_tokenlist_append(tl, (const BF_Token*)tmp_t);
-        free(tmp_t);
+        xfree(tmp_t);
     }
 
     return tl;

@@ -15,10 +15,6 @@
 # define ubyte unsigned char
 #endif /* byte */
 
-/* removed the `if` statement because `free()` ignores
- * NULL pointer by default! */
-#define check_then_free(p) { free((p)); (p) = NULL; }
-
 #define DEINIT_BF_END __attribute__((cleanup(bf_deinit)))
 
 #define BF_LOG_ERR(msg) do {            \
