@@ -4,6 +4,9 @@
 #include "bfi.h"
 
 
+#define BF_VERSION "2.0.0"
+
+
 int main(int argc, char *argv[]) {
     srand(time(NULL));
     if (argc != 2) {
