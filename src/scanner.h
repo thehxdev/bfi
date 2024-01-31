@@ -38,11 +38,11 @@ typedef struct __bf_token {
     size_t repeat;
 
     /* to handle '[' and ']' commands,
-     * lable the matching ones with same
-     * lable to find them easily.
-     * a lable is a randomly generated number.
-     * for other commands this will be 0 */
-    long lable;
+     * store the matching ones index in
+     * each other for constatn time jumps.
+     * For other commands this will be 0.
+     * m_idx -> matching_index */
+    long m_idx;
 } BF_Token;
 
 

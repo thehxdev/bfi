@@ -196,8 +196,7 @@ int bf_execute(BF_State *bfp) {
 
             case '[':
                 if (bfp->arr[bfp->dptr] == 0) {
-                    cptr += 1;
-                    while (tl->tokens[cptr]->lable != t->lable) cptr += 1;
+                    cptr = t->m_idx;
                     cptr += 1;
                 } else {
                     cptr += 1;
@@ -206,8 +205,7 @@ int bf_execute(BF_State *bfp) {
 
             case ']':
                 if (bfp->arr[bfp->dptr] != 0) {
-                    cptr -= 1;
-                    while (tl->tokens[cptr]->lable != t->lable) cptr -= 1;
+                    cptr = t->m_idx;
                     cptr += 1;
                 } else {
                     cptr += 1;

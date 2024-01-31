@@ -13,7 +13,7 @@ static BF_Token *__bf_token_new(const char cmd) {
 
     t->op = cmd;
     t->repeat = 1;
-    t->lable = 0;
+    t->m_idx = 0;
     return t;
 }
 
@@ -64,20 +64,27 @@ void __bf_tokenlist_free(BF_TokenList *bf_tlp) {
 }
 
 
-/* find the matching opening bracket lable in token list */
-static long __bf_find_opening_bracket_lable(const BF_TokenList *bf_tlp) {
-    size_t nest = 0, i;
+/* find the matching opening bracket index in token list.
+ *
+ * Since C doesn't have multiple return values, I needed to 
+ * return the token and it's index. So the functoin returns the token
+ * and stores the index to `m_idx` pointer. */
+static BF_Token *__bf_find_opening_bracket(const BF_TokenList *bf_tlp, long *m_idx) {
+    long nest = 0, i;
     BF_Token *t;
-    for (i = bf_tlp->len - 1; i >= 0; i--) {
+    for (i = (long)bf_tlp->len - 1; i >= 0; i--) {
         t = __bf_tokenlist_get(bf_tlp, i);
         if (t->op == ']')
             nest += 1;
         else if (t->op == '[' && nest > 0)
             nest -= 1;
-        else if (t->op == '[' && nest == 0)
-            return t->lable;
+        else if (t->op == '[' && nest == 0) {
+            *m_idx = i;
+            return t;
+        }
     }
-    return -1;
+    *m_idx = -1;
+    return NULL;
 }
 
 
@@ -88,8 +95,10 @@ static char __bf_cmds_get(const char *bf_cmds, const size_t len, const long idx)
 
 BF_TokenList *__bf_scanner_scan_cmds(const char *bf_cmds, const size_t len) {
     size_t i, j;
+    long m_idx;
     char curr_c;
-    BF_Token *tmp_t;
+    /* m_t -> matching token. used to handle jumps */
+    BF_Token *tmp_t, *m_t;
     BF_TokenList *tl = __bf_tokenlist_new(25);
     if (!tl)
         return NULL;
@@ -105,10 +114,10 @@ BF_TokenList *__bf_scanner_scan_cmds(const char *bf_cmds, const size_t len) {
         if (curr_c != ']' && curr_c != '[') {
             for (j = i + 1; __bf_cmds_get(bf_cmds, len, j) == curr_c; j++, i++)
                 tmp_t->repeat += 1;
-        } else if (curr_c == '[') {
-            tmp_t->lable = __bf_gen_rand_long(0, (1<<16));
         } else if (curr_c == ']') {
-            tmp_t->lable = __bf_find_opening_bracket_lable(tl);
+            m_t = __bf_find_opening_bracket(tl, &m_idx);
+            m_t->m_idx = tl->len;
+            tmp_t->m_idx = m_idx;
         }
 
         __bf_tokenlist_append(tl, (const BF_Token*)tmp_t);
