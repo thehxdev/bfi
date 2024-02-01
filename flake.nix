@@ -6,25 +6,46 @@
     };
 
     outputs = { self, nixpkgs, ... }: let
-        system = "x86_64-linux";
+        supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+
+        forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
+
+        nixpkgsFor = forAllSystems (system: import nixpkgs { inherit system; });
     in {
-        devShells."${system}".default = let
-            pkgs = import nixpkgs { inherit system; };
-        in pkgs.mkShell {
-            packages = with pkgs; [
-                # compiler and cmake
+
+        defaultPackage = forAllSystems (system: let
+            pkgs = nixpkgsFor.${system};
+        in pkgs.stdenv.mkDerivation {
+            name = "bfi";
+            src = ./.;
+            cmakeFlags = [
+                "-DOPTIMIZE=1"
+            ];
+            nativeBuildInputs = with pkgs; [
                 clang_17
                 llvmPackages_17.bintools
                 cmake
-                gnumake
-
-                # debugging stuff
-                gdb
-                valgrind
             ];
+        });
 
-            # shellHook = ''
-            # '';
-        };
+        devShells = forAllSystems (system: let
+            pkgs = nixpkgsFor.${system};
+        in { 
+            default = pkgs.mkShell {
+                buildInputs = with pkgs; [
+                    # compiler and cmake
+                    clang_17
+                    llvmPackages_17.bintools
+                    cmake
+                    gnumake
+
+                    # debugging stuff
+                    gdb
+                    valgrind
+                ];
+                # shellHook = ''
+                # '';
+            };
+        });
     };
 }
