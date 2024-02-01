@@ -77,8 +77,7 @@ If you use [NixOs](https://nixos.org) or you installed `nix` package manager, yo
 ```bash
 nix build
 ```
-
-This will build `bfi` and you can run it from `./result/bin/bfi`.
+Then, you can run the executable from `./result/bin/bfi` path.
 
 
 ### Development Environment
