@@ -17,16 +17,16 @@
 
 /* each command is represented by it's own ascii code */
 enum __BF_CMD {
-    OP_INC_DP  = '>',
-    OP_DEC_DP  = '<',
-    OP_INC_VAL = '+',
-    OP_DEC_VAL = '-',
-    OP_OUTPUT  = '.',
-    OP_INPUT   = ',',
-    OP_JUMP_F  = '[', /* jump forward, if data pointer is zero */
-    OP_JUMP_B  = ']', /* jump backward, if data pointer is not zero */
+    CMD_INC_DP  = '>',
+    CMD_DEC_DP  = '<',
+    CMD_INC_VAL = '+',
+    CMD_DEC_VAL = '-',
+    CMD_OUTPUT  = '.',
+    CMD_INPUT   = ',',
+    CMD_JUMP_F  = '[', /* jump forward, if data pointer is zero */
+    CMD_JUMP_B  = ']', /* jump backward, if data pointer is not zero */
 #ifdef NON_STD_CMDS
-    OP_CLEAR   = '?',
+    CMD_CLEAR   = '?',
 #endif /* NON_STD_CMDS */
 };
 
