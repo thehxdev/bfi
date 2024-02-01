@@ -86,3 +86,16 @@ To enter development environment:
 nix develop
 ```
 
+### Use BFI directly
+Run `bfi` without downloading the source code and manually building it:
+```bash
+nix run github:thehxdev/bfi PATH_TO_BF_SOURCE_FILE
+```
+
+Or Enter an interactive shell with `bfi` command available without installing it:
+```bash
+nix shell github:thehxdev/bfi
+
+# `bfi` is now available in new shell (exit with `exit` command or ctrl-d key)
+$ bfi PATH_TO_BF_SOURCE_FILE
+```
