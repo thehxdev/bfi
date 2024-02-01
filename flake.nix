@@ -21,9 +21,11 @@
             cmakeFlags = [
                 "-DOPTIMIZE=1"
             ];
-            nativeBuildInputs = with pkgs; [
+            buildInputs = with pkgs; [
                 clang_17
                 llvmPackages_17.bintools
+            ];
+            nativeBuildInputs = with pkgs; [
                 cmake
             ];
         });
@@ -32,14 +34,14 @@
             pkgs = nixpkgsFor.${system};
         in { 
             default = pkgs.mkShell {
-                buildInputs = with pkgs; [
-                    # compiler and cmake
+                packages = with pkgs; [
+                    ## compiler and cmake
                     clang_17
                     llvmPackages_17.bintools
-                    cmake
-                    gnumake
+                    # cmake
+                    # gnumake
 
-                    # debugging stuff
+                    ## debugging stuff
                     gdb
                     valgrind
                 ];
