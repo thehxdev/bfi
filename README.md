@@ -8,6 +8,7 @@ You can find more complex and interesting examples in [brainfuck.org](https://br
 and execute them with BFI.
 
 
+
 ## Build
 First clone the source code using git.
 ```bash
@@ -36,6 +37,7 @@ cd ..
 Then you can use `bfi` executable in `build/` directory.
 
 
+
 ## Use
 After you built `bfi`, You can run examples provided in `examples` directory.
 if you are in the project root directory:
@@ -61,3 +63,27 @@ If you bulid `bfi` with `-DNON_STANDARD_CMDS=1` flag (see Build section), you ha
 that I added to `bfi`:
 
 - `?` : reset everything to initial state (set all data to 0 and rewind data pointer).
+
+
+
+## Nix
+Use `nix` package manager to build `bfi` or make an interactive shell for development with all dependencies.
+
+### Build
+> [!NOTE]
+> Make sure that you enabled nix experimental features such as `nix-command` and `flakes`.
+
+If you use [NixOs](https://nixos.org) or you installed `nix` package manager, you can build `bfi` in one command.
+```bash
+nix build
+```
+
+This will build `bfi` and you can run it from `./result/bin/bfi`.
+
+
+### Development Environment
+To enter development environment:
+```bash
+nix develop
+```
+
