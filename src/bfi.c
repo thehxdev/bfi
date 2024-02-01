@@ -129,7 +129,7 @@ BF_State *bf_init(const char *s_path) {
     __bf_check_matching_brackets(bfs);
 
     /* tokenize the commands */
-    bfs->tl = __bf_scanner_scan_cmds(bfs->cmds, bfs->cmds_c);
+    bfs->tl = __bf_scan_cmds(bfs->cmds, bfs->cmds_c);
     if (!bfs->tl) {
         BF_LOG_ERR("Scanning BF commands failed");
         bf_deinit(&bfs);

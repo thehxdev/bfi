@@ -55,7 +55,7 @@ typedef struct __bf_tokenlist {
 
 
 /* scan BF commands and create a token list */
-BF_TokenList *__bf_scanner_scan_cmds(const char *bf_cmds, const size_t len);
+BF_TokenList *__bf_scan_cmds(const char *bf_cmds, const size_t len);
 
 
 /* free a token list */

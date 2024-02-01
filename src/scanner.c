@@ -93,7 +93,7 @@ static char __bf_cmds_get(const char *bf_cmds, const size_t len, const long idx)
 }
 
 
-BF_TokenList *__bf_scanner_scan_cmds(const char *bf_cmds, const size_t len) {
+BF_TokenList *__bf_scan_cmds(const char *bf_cmds, const size_t len) {
     size_t i, j;
     long m_idx;
     char curr_c;
