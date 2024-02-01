@@ -1,5 +1,5 @@
 {
-    description = "Nix Flake-Based development environment for BFI";
+    description = "BFI Nix Flake";
 
     inputs = {
         nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
