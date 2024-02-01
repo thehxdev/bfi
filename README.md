@@ -73,7 +73,7 @@ Use `nix` package manager to build `bfi` or make an interactive shell for develo
 > [!NOTE]
 > Make sure that you enabled nix experimental features such as `nix-command` and `flakes`.
 
-If you use [NixOs](https://nixos.org) or you installed `nix` package manager, you can build `bfi` in one command.
+If you use [NixOS](https://nixos.org) or you installed `nix` package manager, you can build `bfi` in one command.
 ```bash
 nix build
 ```
