@@ -38,7 +38,7 @@
                     ## compiler and cmake
                     clang_17
                     llvmPackages_17.bintools
-                    # cmake
+                    cmake
                     # gnumake
 
                     ## debugging stuff
