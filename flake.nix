@@ -6,6 +6,8 @@
     };
 
     outputs = { self, nixpkgs, ... }: let
+        pkgName = "bfi";
+
         supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
 
         forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
@@ -13,22 +15,26 @@
         nixpkgsFor = forAllSystems (system: import nixpkgs { inherit system; });
     in {
 
-        defaultPackage = forAllSystems (system: let
-            pkgs = nixpkgsFor.${system};
-        in pkgs.stdenv.mkDerivation {
-            name = "bfi";
-            src = ./.;
-            cmakeFlags = [
-                "-DOPTIMIZE=1"
-            ];
-            buildInputs = with pkgs; [
-                clang_17
-                llvmPackages_17.bintools
-            ];
-            nativeBuildInputs = with pkgs; [
-                cmake
-            ];
+        packages = forAllSystems (system: let
+          pkgs = nixpkgsFor.${system};
+        in {
+            ${pkgName} = pkgs.stdenv.mkDerivation {
+                name = "${pkgName}";
+                src = ./.;
+                cmakeFlags = [
+                    "-DOPTIMIZE=1"
+                ];
+                buildInputs = with pkgs; [
+                    clang_17
+                    llvmPackages_17.bintools
+                ];
+                nativeBuildInputs = with pkgs; [
+                    cmake
+                ];
+            };
         });
+
+        defaultPackage = forAllSystems (system: self.packages.${system}.${pkgName});
 
         devShells = forAllSystems (system: let
             pkgs = nixpkgsFor.${system};
