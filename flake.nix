@@ -22,6 +22,7 @@
                 name = "${pkgName}";
                 src = ./.;
                 cmakeFlags = [
+                    "-GNinja"
                     "-DOPTIMIZE=1"
                 ];
                 buildInputs = with pkgs; [
@@ -45,14 +46,17 @@
                     clang_17
                     llvmPackages_17.bintools
                     cmake
-                    # gnumake
+                    ninja
+                    gnumake
 
                     ## debugging stuff
                     gdb
                     valgrind
                 ];
-                # shellHook = ''
-                # '';
+                shellHook = ''
+                CC=clang
+                CXX=clang++
+                '';
             };
         });
     };
