@@ -203,21 +203,15 @@ int bf_execute(BF_TokenList **tlp, ubyte **darr) {
                 break;
 
             case '[':
-                if (arr[dptr] == 0) {
+                if (arr[dptr] == 0)
                     cptr = t->m_idx;
-                    cptr += 1;
-                } else {
-                    cptr += 1;
-                }
+                cptr += 1;
                 break;
 
             case ']':
-                if (arr[dptr] != 0) {
+                if (arr[dptr] != 0)
                     cptr = t->m_idx;
-                    cptr += 1;
-                } else {
-                    cptr += 1;
-                }
+                cptr += 1;
                 break;
         }
 
