@@ -17,17 +17,14 @@
 
 #define DEINIT_BF_END __attribute__((cleanup(bf_deinit)))
 
-#define BF_LOG_ERR(msg) do {            \
-    fprintf(stderr, "[ERROR] %s\n", msg); \
+#define BF_LOG_ERR(msg) do {                \
+    fprintf(stderr, "[ERROR] %s\n", msg);   \
 } while(0)
 
 
 typedef struct __bf_state {
     /* data array */
     ubyte *arr;
-
-    /* data pointer location */
-    long dptr;
 
     /* BF commands that read from a source file */
     char *cmds;
@@ -49,6 +46,6 @@ void bf_deinit(BF_State **bfp);
 
 
 /* execute BF commands */
-int bf_execute(BF_State *bfp);
+int bf_execute(BF_TokenList **tlp, ubyte **darr);
 
 #endif /* BFI_BFI_H */

@@ -34,24 +34,24 @@ static size_t __bf_source_file_cmds_count(FILE *fp) {
 }
 
 
-/* read a BF source file, remove any unnecessary character
- * and store commands in BF_State */
-static int __bf_read_source_file(BF_State *bfp, const char *path) {
+/* read a BF source file and remove any unnecessary character.
+ * Then write the commands to `**buff` and length of commands
+ * to `*len` */
+static int __bf_read_source_file(char **buff, size_t *len, const char *path) {
     char ch;
     size_t i = 0;
     FILE *fp = fopen(path, "rb");
     if (!fp) {
-        BF_LOG_ERR("source file not found.");
-        bf_deinit(&bfp);
-        exit(1);
+        fprintf(stderr, "Could not open source file: ");
+        perror(NULL);
+        return 1;
     }
 
-    bfp->cmds_c = __bf_source_file_cmds_count(fp);
-    bfp->cmds = (char*) calloc(bfp->cmds_c + 1, 1);
-    if (!bfp->cmds) {
+    *len = __bf_source_file_cmds_count(fp);
+    *buff = (char*) calloc((*len) + 1, 1);
+    if (!(*buff)) {
         BF_LOG_ERR("Allocating memory for BF commands failed.");
-        bf_deinit(&bfp);
-        exit(1);
+        return 1;
     }
 
     while ((ch = fgetc(fp)) != EOF) {
@@ -66,7 +66,7 @@ static int __bf_read_source_file(BF_State *bfp, const char *path) {
             case '.':
             case ',':
             case '[':
-            case ']': bfp->cmds[i] = ch; i += 1; break;
+            case ']': (*buff)[i] = ch; i += 1; break;
         }
     }
 
@@ -77,18 +77,17 @@ static int __bf_read_source_file(BF_State *bfp, const char *path) {
 
 /* check all brackets before execution and if there are
  * non-matching ones, report error and exit */
-static void __bf_check_matching_brackets(BF_State *bfp) {
+static int __bf_check_matching_brackets(char *cmds) {
     char c;
     size_t i = 0;
     size_t nest = 0;
 
-    while ((c = bfp->cmds[i])) {
+    while ((c = cmds[i])) {
         if (c == '[') {
             nest += 1;
         } else if (c == ']' && nest == 0) {
             BF_LOG_ERR("extra \']\' command found");
-            bf_deinit(&bfp);
-            exit(1);
+            return 1;
         } else if (c == ']' && nest > 0) {
             nest -= 1;
         }
@@ -101,13 +100,15 @@ static void __bf_check_matching_brackets(BF_State *bfp) {
      * extra `[` character are used */
     if (nest > 0) {
         BF_LOG_ERR("extra \'[\' commands found");
-        bf_deinit(&bfp);
-        exit(1);
+        return 1;
     }
+
+    return 0;
 }
 
 
 BF_State *bf_init(const char *s_path) {
+    int err;
     BF_State *bfs = (BF_State*) malloc(sizeof(BF_State));
     if (!bfs)
         return NULL;
@@ -118,15 +119,21 @@ BF_State *bf_init(const char *s_path) {
         xfree(bfs);
         exit(1);
     }
-
-    bfs->dptr = 0;
     bfs->cmds_c = 0;
 
     /* read the source file, removed any unnecessary character
      * and store commands to bfs->cmds */
-    __bf_read_source_file(bfs, s_path);
+    err = __bf_read_source_file(&bfs->cmds, &bfs->cmds_c, s_path);
+    if (err) {
+        bf_deinit(&bfs);
+        exit(1);
+    }
 
-    __bf_check_matching_brackets(bfs);
+    err = __bf_check_matching_brackets(bfs->cmds);
+    if (err) {
+        bf_deinit(&bfs);
+        exit(1);
+    }
 
     /* tokenize the commands */
     bfs->tl = __bf_scan_cmds(bfs->cmds, bfs->cmds_c);
@@ -154,9 +161,10 @@ void bf_deinit(BF_State **bfp) {
 }
 
 
-int bf_execute(BF_State *bfp) {
-    long cptr = 0, i;
-    BF_TokenList *tl = bfp->tl;
+int bf_execute(BF_TokenList **tlp, ubyte **darr) {
+    long cptr = 0, i, dptr = 0;
+    ubyte *arr = *darr;
+    BF_TokenList *tl = *tlp;
     BF_Token *t;
 
     while (cptr < (long)tl->len) {
@@ -171,31 +179,31 @@ int bf_execute(BF_State *bfp) {
                 break;
 #endif /* NON_STD_CMDS */
             case '>':
-                bfp->dptr += t->repeat; cptr += 1; break;
+                dptr += t->repeat; cptr += 1; break;
 
             case '<':
-                bfp->dptr -= t->repeat; cptr += 1; break;
+                dptr -= t->repeat; cptr += 1; break;
 
             case '+':
-                bfp->arr[bfp->dptr] += t->repeat; cptr += 1; break;
+                arr[dptr] += t->repeat; cptr += 1; break;
 
             case '-':
-                bfp->arr[bfp->dptr] -= t->repeat; cptr += 1; break;
+                arr[dptr] -= t->repeat; cptr += 1; break;
 
             case '.':
                 for (i = 0; i < (long)t->repeat; i++)
-                    fputc(bfp->arr[bfp->dptr], stdout);
+                    fputc(arr[dptr], stdout);
                 cptr += 1;
                 break;
 
             case ',':
                 for (i = 0; i < (long)t->repeat; i++)
-                    scanf("%c", &bfp->arr[bfp->dptr]);
+                    scanf("%c", &arr[dptr]);
                 cptr += 1;
                 break;
 
             case '[':
-                if (bfp->arr[bfp->dptr] == 0) {
+                if (arr[dptr] == 0) {
                     cptr = t->m_idx;
                     cptr += 1;
                 } else {
@@ -204,7 +212,7 @@ int bf_execute(BF_State *bfp) {
                 break;
 
             case ']':
-                if (bfp->arr[bfp->dptr] != 0) {
+                if (arr[dptr] != 0) {
                     cptr = t->m_idx;
                     cptr += 1;
                 } else {
@@ -213,9 +221,8 @@ int bf_execute(BF_State *bfp) {
                 break;
         }
 
-        if (bfp->dptr < 0) {
+        if (dptr < 0) {
             BF_LOG_ERR("Out of bound access in data array.");
-            bf_deinit(&bfp);
             exit(1);
         }
     }

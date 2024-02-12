@@ -12,6 +12,6 @@ int main(int argc, char *argv[]) {
     }
 
     BF_State DEINIT_BF_END *bf = bf_init(argv[1]);
-    bf_execute(bf);
+    bf_execute(&bf->tl, &bf->arr);
     return 0;
 }
