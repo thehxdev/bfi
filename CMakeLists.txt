@@ -1,16 +1,21 @@
 cmake_minimum_required(VERSION 3.15)
 
 project(
-  bfi
-  VERSION 2.1.0
-  LANGUAGES C)
+    bfi
+    VERSION 2.1.0
+    LANGUAGES C
+)
 
 
 set(CMAKE_C_STANDARD 99)
-add_compile_options(-Wall -Wextra -Wno-unused-result)
+add_compile_options(
+    -Wall
+    -Wextra
+    -Wno-unused-result
+)
 
 if (OPTIMIZE)
-    add_compile_options(-O2)
+    add_compile_options(-O2 -DNDEBUG)
 else()
     add_compile_options(-Og -ggdb)
 endif()
