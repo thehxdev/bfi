@@ -162,64 +162,64 @@ void bf_deinit(BF_State **bfp) {
 
 
 int bf_execute(BF_TokenList **tlp, ubyte **darr) {
-    long cptr = 0, i, dptr = 0;
+    long i;
     ubyte *arr = *darr;
     BF_TokenList *tl = *tlp;
-    BF_Token *t;
 
-    while (cptr < (long)tl->len) {
-        t = __bf_tokenlist_get(tl, cptr);
+    BF_Token **tks = tl->tokens, *t;
+    tks[tl->len] = NULL;
 
+    while (*tks) {
+        t = *tks;
         switch (t->op) {
 #ifdef NON_STD_CMDS
             case '?':
-                memset(bfp->arr, 0, __BF_ARR_CAP);
-                bfp->dptr = 0;
-                cptr += 1;
+                arr = *darr;
+                memset(arr, 0, __BF_ARR_CAP);
+                tks++;
                 break;
 #endif /* NON_STD_CMDS */
             case '>':
-                dptr += t->repeat; cptr += 1; break;
+                arr += t->repeat; tks++; break;
 
             case '<':
-                dptr -= t->repeat; cptr += 1; break;
+                arr -= t->repeat; tks++; break;
 
             case '+':
-                arr[dptr] += t->repeat; cptr += 1; break;
+                *arr += t->repeat; tks++; break;
 
             case '-':
-                arr[dptr] -= t->repeat; cptr += 1; break;
+                *arr -= t->repeat; tks++; break;
 
             case '.':
                 for (i = 0; i < (long)t->repeat; i++)
-                    fputc(arr[dptr], stdout);
-                cptr += 1;
+                    fputc(*arr, stdout);
+                tks++;
                 break;
 
             case ',':
                 for (i = 0; i < (long)t->repeat; i++)
-                    scanf("%c", &arr[dptr]);
-                cptr += 1;
+                    scanf("%c", arr);
+                tks++;
                 break;
 
             case '[':
-                if (arr[dptr] == 0)
-                    cptr = t->m_idx;
-                cptr += 1;
+                if (*arr == 0)
+                    tks = &(tl->tokens[t->m_idx]);
+                tks++;
                 break;
 
             case ']':
-                if (arr[dptr] != 0)
-                    cptr = t->m_idx;
-                cptr += 1;
+                if (*arr != 0)
+                    tks = &(tl->tokens[t->m_idx]);
+                tks++;
                 break;
-        }
 
-        if (dptr < 0) {
-            BF_LOG_ERR("Out of bound access in data array.");
-            exit(1);
-        }
-    }
+            default:
+                BF_LOG_ERR("Invalid BF Token.");
+                exit(1);
+        } /* End switch(t->op) */
+    } /* End while(*tsk) */
 
     return 0;
 }
