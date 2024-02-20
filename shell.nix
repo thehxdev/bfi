@@ -10,6 +10,7 @@ pkgs.mkShell {
 
         ## debugging stuff
         gdb
+        gf
         valgrind
     ];
 
