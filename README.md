@@ -18,20 +18,28 @@ cd bfi
 ```
 
 Make sure that you have a C compiler like `gcc` or `clang`, `cmake` and `make` installed.
+
+### Cmake build options:
+- `NON_STD_CMDS`
+You can set `-DNON_STD_CMDS` to 1 if you want the commands that I added to `bfi` like `?` command.
+otherwise `bfi` acts like a standard BrainF*ck interpreter
+with no extra commands.
+
+- `OPTIMIZE`
+To compile with debug information, set `-DOPTIMIZE` to 0.
+
+- `SAFE_BFI`
+To add memory access protections set `-DSAFE_BFI` to 1.
+This makes bfi slower but out of range accesses to memory while executing BrainF\*ck source code will be catched.
+
+
+To build `bfi`:
 ```bash
 mkdir -p build/
 
-# You can set `-DNON_STANDARD_CMDS` to 1 if you want
-# the commands that I added to `bfi` like `?` command.
-# otherwise `bfi` acts like a standard BrainF*ck interpreter
-# with no extra commands.
-#
-# To compile with debug information, set `-DOPTIMIZE` to 0.
-cmake -DNON_STANDARD_CMDS=0 -DOPTIMIZE=1 -B build/ -S .
+cmake -DNON_STD_CMDS=0 -DSAFE_BFI=0 -DOPTIMIZE=1 -B build/ -S .
 
-cd build/
-cmake --build .
-cd ..
+cmake --build build/
 ```
 
 Then you can use `bfi` executable in `build/` directory.

@@ -191,13 +191,15 @@ int bf_execute(BF_TokenList **tlp, ubyte **darr) {
                 *arr -= t->repeat; tks++; break;
 
             case '.':
-                for (i = 0; i < (long)t->repeat; i++)
+                i = t->repeat;
+                while (i--)
                     fputc(*arr, stdout);
                 tks++;
                 break;
 
             case ',':
-                for (i = 0; i < (long)t->repeat; i++)
+                i = t->repeat;
+                while (i--)
                     scanf("%c", arr);
                 tks++;
                 break;
@@ -214,10 +216,19 @@ int bf_execute(BF_TokenList **tlp, ubyte **darr) {
                 tks++;
                 break;
 
+#ifdef SAFE_BFI
             default:
                 BF_LOG_ERR("Invalid BF Token.");
                 exit(1);
+#endif /* SAFE_BFI */
         } /* End switch(t->op) */
+
+#ifdef SAFE_BFI
+        if (arr < *darr || arr >= (*darr) + __BF_ARR_CAP) {
+            BF_LOG_ERR("Out of range access to data array.");
+            exit(1);
+        }
+#endif /* SAFE_BFI */
 
         t = *tks;
     } /* End while(*tsk) */

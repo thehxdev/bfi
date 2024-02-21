@@ -40,4 +40,8 @@ if (NON_STD_CMDS)
     target_compile_definitions(bfi PUBLIC NON_STD_CMDS)
 endif()
 
+if (SAFE_BFI)
+    target_compile_definitions(bfi PUBLIC SAFE_BFI)
+endif()
+
 install(TARGETS bfi DESTINATION bin)
