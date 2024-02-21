@@ -18,6 +18,7 @@ static BF_Token *__bf_token_new(const char cmd) {
 }
 
 
+/* create a new token list */
 static BF_TokenList *__bf_tokenlist_new(const size_t cap) {
     BF_TokenList *tl = malloc(sizeof(BF_TokenList));
     if (!tl)
@@ -30,10 +31,12 @@ static BF_TokenList *__bf_tokenlist_new(const size_t cap) {
 }
 
 
+/* append token to token list */
 static int __bf_tokenlist_append(BF_TokenList *bf_tlp, const BF_Token *bf_tp) {
     if (!bf_tlp || !bf_tp)
         return 1;
 
+    /* grow the token list if it's not have enouph space */
     if (bf_tlp->len % bf_tlp->cap == 0) {
         size_t new_size = (bf_tlp->len + bf_tlp->cap) * sizeof(BF_Token*);
         bf_tlp->tokens = realloc(bf_tlp->tokens, new_size);
@@ -52,6 +55,7 @@ static int __bf_tokenlist_append(BF_TokenList *bf_tlp, const BF_Token *bf_tp) {
 }
 
 
+/* free a token list and all of it's elements */
 void __bf_tokenlist_free(BF_TokenList *bf_tlp) {
     size_t i;
     if (bf_tlp) {
@@ -72,6 +76,10 @@ void __bf_tokenlist_free(BF_TokenList *bf_tlp) {
 static BF_Token *__bf_find_opening_bracket(const BF_TokenList *bf_tlp, long *m_idx) {
     long nest = 0, i;
     BF_Token *t;
+    /* start the loop from the end of token list because
+     * this function is used while adding tokens to token
+     * list. So logicaly, the closing bracket (`]` command)
+     * is the last one in the token list. */
     for (i = (long)bf_tlp->len - 1; i >= 0; i--) {
         t = __bf_tokenlist_get(bf_tlp, i);
         if (t->op == ']')
@@ -93,6 +101,7 @@ static char __bf_cmds_get(const char *bf_cmds, const size_t len, const long idx)
 }
 
 
+/* scan the commands and create a token list */
 BF_TokenList *__bf_scan_cmds(const char *bf_cmds, const size_t len) {
     size_t i, j;
     long m_idx;

@@ -6,13 +6,18 @@
 #include "xmem.h"
 
 
-/* count the commands in a source file */
+/* Count the commands in a source file.
+ * To keep things simple, I'm not implemented a dynamic array.
+ * Just count commands and allocate a static array to store them. */
 static size_t __bf_source_file_cmds_count(FILE *fp) {
     char ch;
     size_t count = 0;
     if (!fp)
         return 0;
 
+    /* Read the input file until the end character
+     * by character and Ignore all the characters
+     * that are not a valid BrainFuck command. */
     while ((ch = fgetc(fp)) != EOF) {
         switch (ch) {
 #ifdef NON_STD_CMDS
@@ -75,14 +80,13 @@ static int __bf_read_source_file(char **buff, size_t *len, const char *path) {
 }
 
 
-/* check all brackets before execution and if there are
- * non-matching ones, report error and exit */
+/* check all brackets before execution phase and if there are
+ * non-matching ones, report an error and exit */
 static int __bf_check_matching_brackets(char *cmds) {
     char c;
-    size_t i = 0;
     size_t nest = 0;
 
-    while ((c = cmds[i])) {
+    while ((c = *cmds)) {
         if (c == '[') {
             nest += 1;
         } else if (c == ']' && nest == 0) {
@@ -91,8 +95,7 @@ static int __bf_check_matching_brackets(char *cmds) {
         } else if (c == ']' && nest > 0) {
             nest -= 1;
         }
-
-        i += 1;
+        cmds++;
     }
 
     /* if all commands are checked and

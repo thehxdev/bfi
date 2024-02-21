@@ -5,6 +5,7 @@
 #include "scanner.h"
 
 
+/* Capacity of BrainFuck data array */
 #define __BF_ARR_CAP (1<<16)
 
 
@@ -15,13 +16,17 @@
 # define ubyte unsigned char
 #endif /* byte */
 
+/* a special attribute to call `bf_deinit` on `BF_State`
+ * at the end of scope */
 #define DEINIT_BF_END __attribute__((cleanup(bf_deinit)))
 
+/* Log error messages */
 #define BF_LOG_ERR(msg) do {                \
     fprintf(stderr, "[ERROR] %s\n", msg);   \
 } while(0)
 
 
+/* `BF_State` type to store the state of interpreter */
 typedef struct __bf_state {
     /* data array */
     ubyte *arr;
