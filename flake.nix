@@ -24,6 +24,8 @@
                 cmakeFlags = [
                     "-GNinja"
                     "-DOPTIMIZE=1"
+                    "-DSAFE_BFI=0"
+                    "-DNON_STD_CMDS=0"
                 ];
                 buildInputs = with pkgs; [
                     clang_17
