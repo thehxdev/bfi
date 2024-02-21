@@ -46,7 +46,7 @@ Then you can use `bfi` executable in `build/` directory.
 
 
 
-## Use
+## Usage
 After you built `bfi`, You can run examples provided in `examples` directory.
 if you are in the project root directory:
 ```bash
