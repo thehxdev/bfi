@@ -20,15 +20,15 @@ cd bfi
 Make sure that you have a C compiler like `gcc` or `clang`, `cmake` and `make` installed.
 
 ### Cmake build options:
-- `NON_STD_CMDS`
+- `NON_STD_CMDS`: 
 You can set `-DNON_STD_CMDS` to 1 if you want the commands that I added to `bfi` like `?` command.
 otherwise `bfi` acts like a standard BrainF*ck interpreter
 with no extra commands.
 
-- `OPTIMIZE`
+- `OPTIMIZE`: 
 To compile with debug information, set `-DOPTIMIZE` to 0.
 
-- `SAFE_BFI`
+- `SAFE_BFI`: 
 To add memory access protections set `-DSAFE_BFI` to 1.
 This makes bfi slower but out of range accesses to memory while executing BrainF\*ck source code will be catched.
 
