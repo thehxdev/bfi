@@ -77,6 +77,9 @@ that I added to `bfi`:
 ## Nix
 Use `nix` package manager to build `bfi` or make an interactive shell for development with all dependencies.
 
+> [!NOTE]
+> Nix flake version of BFI will be compiled with optimizations and **without** `SAFE_BFI` and `NON_STD_CMDS` flags.
+
 ### Build
 > [!NOTE]
 > Make sure that you enabled nix experimental features such as `nix-command` and `flakes`.
