@@ -166,11 +166,10 @@ int bf_execute(BF_TokenList **tlp, ubyte **darr) {
     ubyte *arr = *darr;
     BF_TokenList *tl = *tlp;
 
-    BF_Token **tks = tl->tokens, *t;
+    BF_Token **tks = tl->tokens, *t = *tks;
     tks[tl->len] = NULL;
 
-    while (*tks) {
-        t = *tks;
+    while (t) {
         switch (t->op) {
 #ifdef NON_STD_CMDS
             case '?':
@@ -219,6 +218,8 @@ int bf_execute(BF_TokenList **tlp, ubyte **darr) {
                 BF_LOG_ERR("Invalid BF Token.");
                 exit(1);
         } /* End switch(t->op) */
+
+        t = *tks;
     } /* End while(*tsk) */
 
     return 0;
