@@ -29,11 +29,11 @@ endif()
 
 
 # BFI
-set(SRC_DIR "./src")
+set(SRC "./src")
 set(SRC_FILES
-    ${SRC_DIR}/main.c
-    ${SRC_DIR}/bfi.c
-    ${SRC_DIR}/scanner.c
+    ${SRC}/main.c
+    ${SRC}/bfi.c
+    ${SRC}/scanner.c
 )
 add_executable(bfi ${SRC_FILES})
 if (NON_STD_CMDS)
