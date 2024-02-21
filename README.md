@@ -67,7 +67,7 @@ if you are in the project root directory:
 - `]` : jump to next command of matching `[` (goes backward), if the data pointer's data is non-zero
 
 
-If you bulid `bfi` with `-DNON_STANDARD_CMDS=1` flag (see Build section), you have access to more commands
+If you bulid `bfi` with `-DNON_STD_CMDS=1` flag (see Build section), you have access to more commands
 that I added to `bfi`:
 
 - `?` : reset everything to initial state (set all data to 0 and rewind data pointer).
