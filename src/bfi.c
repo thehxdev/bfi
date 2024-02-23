@@ -178,45 +178,40 @@ int bf_execute(BF_TokenList **tlp, ubyte **darr) {
             case '?':
                 arr = *darr;
                 memset(arr, 0, __BF_ARR_CAP);
-                tks++;
                 break;
 #endif /* NON_STD_CMDS */
             case '>':
-                arr += t->repeat; tks++; break;
+                arr += t->repeat; break;
 
             case '<':
-                arr -= t->repeat; tks++; break;
+                arr -= t->repeat; break;
 
             case '+':
-                *arr += t->repeat; tks++; break;
+                *arr += t->repeat; break;
 
             case '-':
-                *arr -= t->repeat; tks++; break;
+                *arr -= t->repeat; break;
 
             case '.':
                 i = t->repeat;
                 while (i--)
                     fputc(*arr, stdout);
-                tks++;
                 break;
 
             case ',':
                 i = t->repeat;
                 while (i--)
                     scanf("%c", arr);
-                tks++;
                 break;
 
             case '[':
                 if (*arr == 0)
                     tks = &(tl->tokens[t->m_idx]);
-                tks++;
                 break;
 
             case ']':
                 if (*arr != 0)
                     tks = &(tl->tokens[t->m_idx]);
-                tks++;
                 break;
 
 #ifdef SAFE_BFI
@@ -233,7 +228,7 @@ int bf_execute(BF_TokenList **tlp, ubyte **darr) {
         }
 #endif /* SAFE_BFI */
 
-        t = *tks;
+        t = *(++tks);
     } /* End while(*tsk) */
 
     return 0;
