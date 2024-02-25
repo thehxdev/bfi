@@ -217,19 +217,83 @@ int bf_execute(BF_TokenList **tlp, ubyte **darr) {
 #ifdef SAFE_BFI
             default:
                 BF_LOG_ERR("Invalid BF Token.");
-                exit(1);
+                return 1;
 #endif /* SAFE_BFI */
         } /* End switch(t->op) */
 
 #ifdef SAFE_BFI
         if (arr < *darr || arr >= (*darr) + __BF_ARR_CAP) {
             BF_LOG_ERR("Out of range access to data array.");
-            exit(1);
+            return 1;
         }
 #endif /* SAFE_BFI */
 
         t = *(++tks);
     } /* End while(*tsk) */
+
+    return 0;
+}
+
+
+int bf_dump_tokens(BF_TokenList **tlp, const char *out_path) {
+    BF_TokenList *tl = *tlp;
+    BF_Token **tks = tl->tokens, *t = *tks;
+
+    FILE *fp = fopen(out_path, "w");
+    if (!fp) {
+        fprintf(stderr, "[ERROR] Could not open output file: ");
+        perror(NULL);
+        return 1;
+    }
+
+    while (t) {
+        switch(t->op) {
+#ifdef NON_STD_CMDS
+            case '?':
+                fprintf(fp, "RESET\n");
+                break;
+#endif /* NON_STD_CMDS */
+            case '>':
+                fprintf(fp, "INC_PTR\t\t%zu\n", t->repeat);
+                break;
+
+            case '<':
+                fprintf(fp, "DEC_PTR\t\t%zu\n", t->repeat);
+                break;
+
+            case '+':
+                fprintf(fp, "INC_PTR_V\t%zu\n", t->repeat);
+                break;
+
+            case '-':
+                fprintf(fp, "DEC_PTR_V\t%zu\n", t->repeat);
+                break;
+
+            case '.':
+                fprintf(fp, "OUT_PTR_V\t%zu\n", t->repeat);
+                break;
+
+            case ',':
+                fprintf(fp, "GET_PTR_V\t%zu\n", t->repeat);
+                break;
+
+            case '[':
+                fprintf(fp, "JMP_NOT_Z\t%zu\n", t->m_idx);
+                break;
+
+            case ']':
+                fprintf(fp, "JMP_IF_Z\t%zu\n", t->m_idx);
+                break;
+
+#ifdef SAFE_BFI
+            default:
+                BF_LOG_ERR("Invalid BF Token.");
+                return 1;
+#endif /* SAFE_BFI */
+        } /* End switch(t->op) */
+
+        t = *(++tks);
+    } /* End while(t) */
 
     return 0;
 }

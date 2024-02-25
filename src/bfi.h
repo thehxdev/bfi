@@ -53,4 +53,8 @@ void bf_deinit(BF_State **bfp);
 /* execute BF commands */
 int bf_execute(BF_TokenList **tlp, ubyte **darr);
 
+
+/* write BrainF*ck tokenized commands to a file */
+int bf_dump_tokens(BF_TokenList **tlp, const char *out_path);
+
 #endif /* BFI_BFI_H */
