@@ -4,6 +4,9 @@
 #include "scanner.h"
 #include "xmem.h"
 
+static inline BF_Token *__bf_tokenlist_get(const BF_TokenList *bf_tlp, const long idx) {
+    return (idx >= 0 && idx < (long)bf_tlp->len) ? bf_tlp->tokens[idx] : NULL;
+}
 
 /* create a new token */
 static BF_Token *__bf_token_new(const char cmd) {
@@ -96,7 +99,7 @@ static BF_Token *__bf_find_opening_bracket(const BF_TokenList *bf_tlp, long *m_i
 }
 
 
-static char __bf_cmds_get(const char *bf_cmds, const size_t len, const long idx) {
+static inline char __bf_cmds_get(const char *bf_cmds, const size_t len, const long idx) {
     return (idx >= 0 && idx < (long)len) ? bf_cmds[idx] : '\0';
 }
 
@@ -134,9 +137,4 @@ BF_TokenList *__bf_scan_cmds(const char *bf_cmds, const size_t len) {
     }
 
     return tl;
-}
-
-
-BF_Token *__bf_tokenlist_get(const BF_TokenList *bf_tlp, const long idx) {
-    return (idx >= 0 && idx < (long)bf_tlp->len) ? bf_tlp->tokens[idx] : NULL;
 }

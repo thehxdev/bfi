@@ -61,8 +61,4 @@ BF_TokenList *__bf_scan_cmds(const char *bf_cmds, const size_t len);
 /* free a token list */
 void __bf_tokenlist_free(BF_TokenList *bf_tlp);
 
-
-/* get a token from token list */
-BF_Token *__bf_tokenlist_get(const BF_TokenList *bf_tlp, const long idx);
-
 #endif /* BFI_SCANNER_H */
