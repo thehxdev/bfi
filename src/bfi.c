@@ -119,31 +119,25 @@ BF_State *bf_init(const char *s_path) {
     bfs->arr = (ubyte*) calloc(__BF_ARR_CAP, sizeof(ubyte));
     if (!bfs->arr) {
         BF_LOG_ERR("Allocating memory for BF data array failed");
-        xfree(bfs);
-        exit(1);
+        return NULL;
     }
     bfs->cmds_c = 0;
 
     /* read the source file, removed any unnecessary character
      * and store commands to bfs->cmds */
     err = __bf_read_source_file(&bfs->cmds, &bfs->cmds_c, s_path);
-    if (err) {
-        bf_deinit(&bfs);
-        exit(1);
-    }
+    if (err)
+        return NULL;
 
     err = __bf_check_matching_brackets(bfs->cmds);
-    if (err) {
-        bf_deinit(&bfs);
-        exit(1);
-    }
+    if (err)
+        return NULL;
 
     /* tokenize the commands */
     bfs->tl = __bf_scan_cmds(bfs->cmds, bfs->cmds_c);
     if (!bfs->tl) {
         BF_LOG_ERR("Scanning BF commands failed");
-        bf_deinit(&bfs);
-        exit(1);
+        return NULL;
     }
 
     /* after scanning commands to tokens, we don't need

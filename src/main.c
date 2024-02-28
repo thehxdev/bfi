@@ -21,6 +21,11 @@ int main(int argc, char *argv[]) {
      * First command-line argument is BrainFuck
      * source code file path. */
     bf = bf_init(argv[1]);
+    if (!bf) {
+        BF_LOG_ERR("Failed to initialize BFI");
+        err = 1;
+        goto exit;
+    }
 
     /* BFI main loop. Execute tokens */
     err = bf_execute(&bf->tl, &bf->arr);
