@@ -160,10 +160,9 @@ void bf_deinit(BF_State **bfp) {
 
 int bf_execute(BF_TokenList **tlp, ubyte **darr) {
     long i;
-    ubyte *arr = *darr;
     BF_TokenList *tl = *tlp;
-
-    BF_Token **tks = tl->tokens, *t = *tks;
+    register ubyte *arr = *darr;
+    register BF_Token **tks = tl->tokens, *t = *tks;
     tks[tl->len] = NULL;
 
     while (t) {
@@ -231,7 +230,7 @@ int bf_execute(BF_TokenList **tlp, ubyte **darr) {
 
 int bf_dump_tokens(BF_TokenList **tlp, const char *out_path) {
     BF_TokenList *tl = *tlp;
-    BF_Token **tks = tl->tokens, *t = *tks;
+    register BF_Token **tks = tl->tokens, *t = *tks;
 
     FILE *fp = fopen(out_path, "w");
     if (!fp) {
