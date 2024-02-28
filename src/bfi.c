@@ -295,5 +295,6 @@ int bf_dump_tokens(BF_TokenList **tlp, const char *out_path) {
         t = *(++tks);
     } /* End while(t) */
 
+    fclose(fp);
     return 0;
 }
