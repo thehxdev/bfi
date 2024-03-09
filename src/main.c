@@ -2,7 +2,7 @@
 #include "bfi.h"
 
 
-#define BF_VERSION "2.4.2"
+#define BFI_VERSION "2.4.2"
 
 
 int main(int argc, char *argv[]) {
@@ -11,7 +11,7 @@ int main(int argc, char *argv[]) {
 
     if (argc != 2) {
         /* Check command-line arguments */
-        fprintf(stderr, "BFI v" BF_VERSION " - https://github.com/thehxdev/bfi\n");
+        fprintf(stderr, "BFI v" BFI_VERSION " - https://github.com/thehxdev/bfi\n");
         fprintf(stderr, "Usage: bfi <source-file>\n");
         err = 1;
         goto exit;
