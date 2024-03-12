@@ -50,9 +50,9 @@ Then you can use `bfi` executable in `build/` directory.
 After you built `bfi`, You can run examples provided in `examples` directory.
 if you are in the project root directory:
 ```bash
-# run `examples/HelloWorld.bf` file
+# run `examples/helloWorld.bf` file
 # this will print `Hello World!` to stdout
-./build/bfi 'examples/HelloWorld.bf'
+./build/bfi 'examples/helloWorld.bf'
 ```
 
 `bfi` ignores all characters that are not a valid BrainF\*ck command. BrainF\*ck has only 8 commands:
