@@ -11,8 +11,9 @@ int main(int argc, char *argv[]) {
 
     if (argc != 2) {
         /* Check command-line arguments */
-        fprintf(stderr, "BFI v" BFI_VERSION " - https://github.com/thehxdev/bfi\n");
-        fprintf(stderr, "Usage: bfi <source-file>\n");
+        fprintf(stderr,
+                "BFI v" BFI_VERSION " - https://github.com/thehxdev/bfi\n"
+                "Usage: bfi <source-file>\n");
         err = 1;
         goto exit;
     }
