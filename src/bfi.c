@@ -5,6 +5,8 @@
 #include "scanner.h"
 #include "xmem.h"
 
+/* general purpose register in x64 asm */
+#define BF_GEN_ARR_REG "r14"
 
 /* Count the commands in a source file.
  * To keep things simple, I'm not implemented a dynamic array.
@@ -293,10 +295,19 @@ int bf_dump_tokens(BF_TokenList **tlp, const char *out_path) {
 }
 
 
-#define BF_GEN_ARR_REG "r14"
+int bf_compiler_x64nasm(BF_TokenList **tlp, const char *out_path) {
+    size_t i;
+    BF_TokenList *tl = *tlp;
+    register BF_Token **tks = tl->tokens, *t = *tks, *m_t;
 
-static void bf_compiler_write_start_template(FILE *out) {
-    fprintf(out,
+    FILE *fp = fopen(out_path, "w");
+    if (!fp) {
+        fprintf(stderr, "[ERROR] Could not open output file: ");
+        perror(NULL);
+        return 1;
+    }
+
+    fprintf(fp,
             "%%define BF_ARR_LEN 0x10000\n\n"
             "section .text\n"
             "global _start\n\n"
@@ -316,35 +327,6 @@ static void bf_compiler_write_start_template(FILE *out) {
             "je\t\t_exit\n\t"
             "mov\t\t"BF_GEN_ARR_REG", rax\n\n\t"
             );
-}
-
-
-static void bf_compiler_write_exit_template(FILE *out) {
-    fprintf(out,
-            "_exit:\n\t"
-            "mov\t\trdi, [rbp-8]\n\t"
-            "call\tfree\n\t"
-            "leave\n\n\t"
-            "mov\t\trax, 60\n\t"
-            "xor\t\trdi, rdi\n\t"
-            "syscall\n"
-            );
-}
-
-
-int bf_compile_x64asm_nasm(BF_TokenList **tlp, const char *out_path) {
-    size_t i;
-    BF_TokenList *tl = *tlp;
-    register BF_Token **tks = tl->tokens, *t = *tks, *m_t;
-
-    FILE *fp = fopen(out_path, "w");
-    if (!fp) {
-        fprintf(stderr, "[ERROR] Could not open output file: ");
-        perror(NULL);
-        return 1;
-    }
-
-    bf_compiler_write_start_template(fp);
 
     while (t) {
         switch (t->op) {
@@ -423,8 +405,16 @@ int bf_compile_x64asm_nasm(BF_TokenList **tlp, const char *out_path) {
         t = *(++tks);
     } /* end while (t) */
 
-    bf_compiler_write_exit_template(fp);
-    fclose(fp);
+    fprintf(fp,
+            "_exit:\n\t"
+            "mov\t\trdi, [rbp-8]\n\t"
+            "call\tfree\n\t"
+            "leave\n\n\t"
+            "mov\t\trax, 60\n\t"
+            "xor\t\trdi, rdi\n\t"
+            "syscall\n"
+            );
 
+    fclose(fp);
     return 0;
 }

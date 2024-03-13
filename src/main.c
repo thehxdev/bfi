@@ -36,7 +36,7 @@ int main(int argc, char *argv[]) {
         err = bf_execute(&bf->tl, &bf->arr);
     else if (argc == 3)
         /* Compile BF source code to x64 assembly */
-        err = bf_compile_x64asm_nasm(&bf->tl, argv[2]);
+        err = bf_compiler_x64nasm(&bf->tl, argv[2]);
 
     if (err)
         goto exit;
