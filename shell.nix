@@ -7,6 +7,7 @@ pkgs.mkShell {
         cmake
         ninja
         gnumake
+        nasm
 
         ## debugging stuff
         gdb

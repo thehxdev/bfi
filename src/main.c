@@ -9,11 +9,13 @@ int main(int argc, char *argv[]) {
     int err = 0;
     BF_State *bf = NULL;
 
-    if (argc != 2) {
+    if (argc > 3 || argc < 2) {
         /* Check command-line arguments */
         fprintf(stderr,
                 "BFI v" BFI_VERSION " - https://github.com/thehxdev/bfi\n"
-                "Usage: bfi <source-file>\n");
+                "Usage:\n"
+                "\tInterpreter: bfi <source-code-path>\n"
+                "\tCompiler: bfi <source-code-path> <output-asm-path>\n");
         err = 1;
         goto exit;
     }
@@ -29,8 +31,13 @@ int main(int argc, char *argv[]) {
         goto exit;
     }
 
-    /* BFI main loop. Execute tokens */
-    err = bf_execute(&bf->tl, &bf->arr);
+    if (argc == 2)
+        /* BFI main loop. Execute tokens */
+        err = bf_execute(&bf->tl, &bf->arr);
+    else if (argc == 3)
+        /* Compile BF source code to x64 assembly */
+        err = bf_compile_x64asm_nasm(&bf->tl, argv[2]);
+
     if (err)
         goto exit;
 

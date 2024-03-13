@@ -3,3 +3,5 @@ build/
 vgcore*
 .cache/
 result
+a.out
+*.asm

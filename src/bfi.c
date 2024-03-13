@@ -291,3 +291,140 @@ int bf_dump_tokens(BF_TokenList **tlp, const char *out_path) {
     fclose(fp);
     return 0;
 }
+
+
+#define BF_GEN_ARR_REG "r14"
+
+static void bf_compiler_write_start_template(FILE *out) {
+    fprintf(out,
+            "%%define BF_ARR_LEN 0x10000\n\n"
+            "section .text\n"
+            "global _start\n\n"
+            "extern putchar\n"
+            "extern getchar\n"
+            "extern calloc\n"
+            "extern free\n\n\n"
+            "_start:\n\t"
+            "push\trbp\n\t"
+            "mov\t\trbp, rsp\n\t"
+            "sub\t\trsp, 8\n\n\t"
+            "mov\t\trdi, BF_ARR_LEN\n\t"
+            "mov\t\trsi, 1\n\t"
+            "call\tcalloc\n\t"
+            "mov\t[rbp-8], rax\n\t"
+            "cmp\t\trax, 0\n\t"
+            "je\t\t_exit\n\t"
+            "mov\t\t"BF_GEN_ARR_REG", rax\n\n\t"
+            );
+}
+
+
+static void bf_compiler_write_exit_template(FILE *out) {
+    fprintf(out,
+            "_exit:\n\t"
+            "mov\t\trdi, [rbp-8]\n\t"
+            "call\tfree\n\t"
+            "leave\n\n\t"
+            "mov\t\trax, 60\n\t"
+            "xor\t\trdi, rdi\n\t"
+            "syscall\n"
+            );
+}
+
+
+int bf_compile_x64asm_nasm(BF_TokenList **tlp, const char *out_path) {
+    size_t i;
+    BF_TokenList *tl = *tlp;
+    register BF_Token **tks = tl->tokens, *t = *tks, *m_t;
+
+    FILE *fp = fopen(out_path, "w");
+    if (!fp) {
+        fprintf(stderr, "[ERROR] Could not open output file: ");
+        perror(NULL);
+        return 1;
+    }
+
+    bf_compiler_write_start_template(fp);
+
+    while (t) {
+        switch (t->op) {
+            case CMD_INC_DP: {
+                if (t->repeat == 1)
+                    fprintf(fp, "inc\t\t"BF_GEN_ARR_REG"\n\t");
+                else
+                    fprintf(fp, "add\t\t"BF_GEN_ARR_REG", %zu\n\t", t->repeat);
+            }
+            break;
+
+            case CMD_DEC_DP: {
+                if (t->repeat == 1)
+                    fprintf(fp, "dec\t\t"BF_GEN_ARR_REG"\n\t");
+                else
+                    fprintf(fp, "sub\t\t"BF_GEN_ARR_REG", %zu\n\t", t->repeat);
+            }
+            break;
+
+            case CMD_INC_VAL: {
+                if (t->repeat == 1)
+                    fprintf(fp, "inc\t\tbyte["BF_GEN_ARR_REG"]\n\t");
+                else
+                    fprintf(fp, "add\t\tbyte["BF_GEN_ARR_REG"], %zu\n\t", t->repeat);
+            }
+            break;
+
+            case CMD_DEC_VAL: {
+                if (t->repeat == 1)
+                    fprintf(fp, "dec\t\tbyte["BF_GEN_ARR_REG"]\n\t");
+                else
+                    fprintf(fp, "sub\t\tbyte["BF_GEN_ARR_REG"], %zu\n\t", t->repeat);
+            }
+            break;
+
+            case CMD_OUTPUT: {
+                for (i = 0; i < t->repeat; i++) {
+                    fprintf(fp,
+                            "mov\t\tdil, byte["BF_GEN_ARR_REG"]\n\t"
+                            "call\tputchar\n\t");
+                }
+            }
+            break;
+
+            case CMD_INPUT: {
+                for (i = 0; i < t->repeat; i++) {
+                    fprintf(fp,
+                            "call\tgetchar\n\t"
+                            "mov\t\tbyte["BF_GEN_ARR_REG"], al\n\t");
+                }
+            }
+            break;
+
+            case CMD_JUMP_F: {
+                m_t = tl->tokens[t->m_idx];
+                fprintf(fp,
+                        ".L%ld:\n\t"
+                        "cmp\t\tbyte["BF_GEN_ARR_REG"], 0\n\t"
+                        "je\t\t.L%ld\n\t",
+                        m_t->m_idx,
+                        t->m_idx);
+            }
+            break;
+
+            case CMD_JUMP_B: {
+                m_t = tl->tokens[t->m_idx];
+                fprintf(fp,
+                        "cmp\t\tbyte["BF_GEN_ARR_REG"], 0\n\t"
+                        "jne\t\t.L%ld\n"
+                        ".L%ld:\n\t",
+                        t->m_idx,
+                        m_t->m_idx);
+            }
+            break;
+        } /* end switch(t->op) */
+        t = *(++tks);
+    } /* end while (t) */
+
+    bf_compiler_write_exit_template(fp);
+    fclose(fp);
+
+    return 0;
+}

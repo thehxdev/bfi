@@ -57,4 +57,8 @@ int bf_execute(BF_TokenList **tlp, ubyte **darr);
 /* write BrainF*ck tokenized commands to a file */
 int bf_dump_tokens(BF_TokenList **tlp, const char *out_path);
 
+
+/* compile BF source code to x86 nasm compatible assembly */
+int bf_compile_x64asm_nasm(BF_TokenList **tlp, const char *out_path);
+
 #endif /* BFI_BFI_H */
