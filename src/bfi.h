@@ -21,9 +21,7 @@
 #define DEINIT_BF_END __attribute__((cleanup(bf_deinit)))
 
 /* Log error messages */
-#define BF_LOG_ERR(msg) do {                \
-    fprintf(stderr, "[ERROR] %s\n", msg);   \
-} while(0)
+#define BF_LOG_ERR(format, ...) fprintf(stderr, "[ERROR] " format, __VA_ARGS__)
 
 
 /* `BF_State` type to store the state of interpreter */

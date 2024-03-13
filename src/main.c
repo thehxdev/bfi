@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
      * source code file path. */
     bf = bf_init(argv[1]);
     if (!bf) {
-        BF_LOG_ERR("Failed to initialize BFI");
+        BF_LOG_ERR("Failed to initialize BFI\n", NULL);
         err = 1;
         goto exit;
     }
@@ -37,9 +37,6 @@ int main(int argc, char *argv[]) {
     else if (argc == 3)
         /* Compile BF source code to x64 assembly */
         err = bf_compiler_x64nasm(&bf->tl, argv[2]);
-
-    if (err)
-        goto exit;
 
 exit:
     bf_deinit(&bf);

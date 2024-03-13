@@ -49,7 +49,7 @@ static int __bf_read_source_file(char **buff, size_t *len, const char *path) {
     size_t i = 0;
     FILE *fp = fopen(path, "rb");
     if (!fp) {
-        fprintf(stderr, "Could not open source file: ");
+        BF_LOG_ERR("%s: Could not open source file: ", __FUNCTION__);
         perror(NULL);
         return 1;
     }
@@ -57,7 +57,7 @@ static int __bf_read_source_file(char **buff, size_t *len, const char *path) {
     *len = __bf_source_file_cmds_count(fp);
     *buff = (char*) calloc((*len) + 1, 1);
     if (!(*buff)) {
-        BF_LOG_ERR("Allocating memory for BF commands failed.");
+        BF_LOG_ERR("%s: Allocating memory for BF commands failed\n", __FUNCTION__);
         return 1;
     }
 
@@ -92,7 +92,7 @@ static int __bf_check_matching_brackets(char *cmds) {
         if (c == '[') {
             nest += 1;
         } else if (c == ']' && nest == 0) {
-            BF_LOG_ERR("extra \']\' command found");
+            BF_LOG_ERR("%s: Extra \']\' command found\n", __FUNCTION__);
             return 1;
         } else if (c == ']' && nest > 0) {
             nest -= 1;
@@ -104,7 +104,7 @@ static int __bf_check_matching_brackets(char *cmds) {
      * nesting is greater than 0, indicates
      * extra `[` character are used */
     if (nest > 0) {
-        BF_LOG_ERR("extra \'[\' commands found");
+        BF_LOG_ERR("%s: Extra \'[\' commands found\n", __FUNCTION__);
         return 1;
     }
 
@@ -120,7 +120,7 @@ BF_State *bf_init(const char *s_path) {
 
     bfs->arr = (ubyte*) calloc(__BF_ARR_CAP, sizeof(ubyte));
     if (!bfs->arr) {
-        BF_LOG_ERR("Allocating memory for BF data array failed");
+        BF_LOG_ERR("%s: Allocating memory for BF data array failed\n", __FUNCTION__);
         return NULL;
     }
     bfs->cmds_c = 0;
@@ -138,7 +138,7 @@ BF_State *bf_init(const char *s_path) {
     /* tokenize the commands */
     bfs->tl = __bf_scan_cmds(bfs->cmds, bfs->cmds_c);
     if (!bfs->tl) {
-        BF_LOG_ERR("Scanning BF commands failed");
+        BF_LOG_ERR("%s: Scanning BF commands failed\n", __FUNCTION__);
         return NULL;
     }
 
@@ -211,14 +211,14 @@ int bf_execute(BF_TokenList **tlp, ubyte **darr) {
 
 #ifdef SAFE_BFI
             default:
-                BF_LOG_ERR("Invalid BF Token.");
+                BF_LOG_ERR("%s: Invalid BF Token\n", __FUNCTION__);
                 return 1;
 #endif /* SAFE_BFI */
         } /* End switch(t->op) */
 
 #ifdef SAFE_BFI
         if (arr < *darr || arr >= (*darr) + __BF_ARR_CAP) {
-            BF_LOG_ERR("Out of range access to data array.");
+            BF_LOG_ERR("%s: Out of range access to data array\n", __FUNCTION__);
             return 1;
         }
 #endif /* SAFE_BFI */
@@ -282,7 +282,7 @@ int bf_dump_tokens(BF_TokenList **tlp, const char *out_path) {
 
 #ifdef SAFE_BFI
             default:
-                BF_LOG_ERR("Invalid BF Token.");
+                BF_LOG_ERR("%s: Invalid BF Token\n", __FUNCTION__);
                 return 1;
 #endif /* SAFE_BFI */
         } /* End switch(t->op) */
