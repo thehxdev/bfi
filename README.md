@@ -1,6 +1,6 @@
 # BFI
 
-BFI is a BrainF\*ck language interpreter written in C and compatible with C99 standard.
+BFI is a BrainF\*ck interpreter and compiler written in C and compatible with C99 standard.
 
 For more information about BrainF\*ck read the [BrainF\*ck wikipedia page](https://en.wikipedia.org/wiki/Brainfuck).
 
@@ -12,7 +12,7 @@ and execute them with BFI.
 ## Build
 First clone the source code using git.
 ```bash
-git clone --depth 1 --branch=main https://github.com/thehxdev/bfi
+git clone --depth=1 --branch=main https://github.com/thehxdev/bfi
 
 cd bfi
 ```
@@ -47,6 +47,13 @@ Then you can use `bfi` executable in `build/` directory.
 
 
 ## Usage
+
+You can use `bfi` as an interpreter or a compiler.
+
+- If you provide the source code, bfi executes it and acts like an interpreter.
+- If you provide the second command-line argument, bfi compiles source code and writes generated assembly code to the output path.
+
+### Interpreter
 After you built `bfi`, You can run examples provided in `examples` directory.
 if you are in the project root directory:
 ```bash
@@ -54,6 +61,20 @@ if you are in the project root directory:
 # this will print `Hello World!` to stdout
 ./build/bfi 'examples/helloWorld.bf'
 ```
+
+### Compiler
+
+To compile BrainF\*ck source code to **x64 Assembly** (Nasm compatible), provide the output
+`.asm` file.
+Then you can use `basm.sh` script to build the assembly file.
+
+```bash
+# compile `examples/helloWorld.bf` file to helloWorld.asm
+./build/bfi 'examples/helloWorld.bf' './helloWorld.asm'
+
+./basm.sh './helloWorld.asm'
+```
+
 
 `bfi` ignores all characters that are not a valid BrainF\*ck command. BrainF\*ck has only 8 commands:
 
@@ -80,9 +101,10 @@ Use `nix` package manager to build `bfi` or make an interactive shell for develo
 > [!NOTE]
 > Nix flake version of BFI will be compiled with optimizations and **without** `SAFE_BFI` and `NON_STD_CMDS` flags.
 
-### Build
 > [!NOTE]
 > Make sure that you enabled nix experimental features such as `nix-command` and `flakes`.
+
+### Build
 
 If you use [NixOS](https://nixos.org) or you installed `nix` package manager, you can build `bfi` in one command.
 ```bash
