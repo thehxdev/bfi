@@ -53,21 +53,21 @@ You can use `bfi` as an interpreter or a compiler.
 
 ### Interpreter
 
-After you built `bfi`, You can run examples provided in `examples` directory with `run` sub-command.
+After you built `bfi`, You can run examples provided in `examples` directory with `-r` flag.
 while you are in the project root directory:
 ```bash
 # run `examples/helloWorld.bf` file
 # this will print `Hello World!` to stdout
-./build/bfi run 'examples/helloWorld.bf'
+./build/bfi -r 'examples/helloWorld.bf'
 ```
 
 ### Compiler
 
-To compile BrainF\*ck source code to **x64 Assembly** (Nasm compatible), use `compile` sub-command.
+To compile BrainF\*ck source code to **x64 Assembly** (Nasm compatible), use `-c` and `-o` flag.
 Then you can use `basm.sh` script to build the assembly file.
 ```bash
 # compile `examples/helloWorld.bf` file to `helloWorld.asm`
-./build/bfi compile -s 'examples/helloWorld.bf' -o './helloWorld.asm'
+./build/bfi -c 'examples/helloWorld.bf' -o './helloWorld.asm'
 
 ./basm.sh './helloWorld.asm'
 ```
