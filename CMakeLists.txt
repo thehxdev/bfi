@@ -34,6 +34,7 @@ set(SRC_FILES
     ${SRC}/main.c
     ${SRC}/bfi.c
     ${SRC}/scanner.c
+    ${SRC}/cap.c
 )
 add_executable(bfi ${SRC_FILES})
 if (NON_STD_CMDS)
