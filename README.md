@@ -50,31 +50,29 @@ Then you can use `bfi` executable in `build/` directory.
 
 You can use `bfi` as an interpreter or a compiler.
 
-- If you provide the source code, bfi executes it and acts like an interpreter.
-- If you provide the second command-line argument, bfi compiles source code and writes generated assembly code to the output path.
 
 ### Interpreter
-After you built `bfi`, You can run examples provided in `examples` directory.
-if you are in the project root directory:
+
+After you built `bfi`, You can run examples provided in `examples` directory with `run` sub-command.
+while you are in the project root directory:
 ```bash
 # run `examples/helloWorld.bf` file
 # this will print `Hello World!` to stdout
-./build/bfi 'examples/helloWorld.bf'
+./build/bfi run 'examples/helloWorld.bf'
 ```
 
 ### Compiler
 
-To compile BrainF\*ck source code to **x64 Assembly** (Nasm compatible), provide the output
-`.asm` file.
+To compile BrainF\*ck source code to **x64 Assembly** (Nasm compatible), use `compile` sub-command.
 Then you can use `basm.sh` script to build the assembly file.
-
 ```bash
-# compile `examples/helloWorld.bf` file to helloWorld.asm
-./build/bfi 'examples/helloWorld.bf' './helloWorld.asm'
+# compile `examples/helloWorld.bf` file to `helloWorld.asm`
+./build/bfi compile -s 'examples/helloWorld.bf' -o './helloWorld.asm'
 
 ./basm.sh './helloWorld.asm'
 ```
 
+## More Info
 
 `bfi` ignores all characters that are not a valid BrainF\*ck command. BrainF\*ck has only 8 commands:
 
