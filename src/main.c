@@ -20,6 +20,7 @@ int main(int argc, char *argv[]) {
     if (err) {
         fprintf(stderr,
                 "BFI v" BFI_VERSION " - https://github.com/thehxdev/bfi\n"
+                "Cap v" CAP_VERSION " - https://github.com/thehxdev/cap\n"
                 "Usage:\n"
                 "\tInterpreter: bfi -r <source-code-path>\n"
                 "\tCompiler: bfi -c <source-code-path> -o <output-file-path>\n");
