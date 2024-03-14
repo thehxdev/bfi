@@ -39,7 +39,7 @@ extern "C" {
 
 /* enable debugging.
  * un-comment this line to enable logging */
-#define __CAP_DEBUG__
+/* #define __CAP_DEBUG__ */
 
 /* Log error messages */
 #ifdef __CAP_DEBUG__
