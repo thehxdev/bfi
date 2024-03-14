@@ -322,7 +322,7 @@ int bf_compiler_x64nasm(BF_TokenList **tlp, const char *out_path) {
             "mov\t\trdi, BF_ARR_LEN\n\t"
             "mov\t\trsi, 1\n\t"
             "call\tcalloc\n\t"
-            "mov\t[rbp-8], rax\n\t"
+            "mov\t\t[rbp-8], rax\n\t"
             "cmp\t\trax, 0\n\t"
             "je\t\t_exit\n\t"
             "mov\t\t"BF_GEN_ARR_REG", rax\n\n\t"
