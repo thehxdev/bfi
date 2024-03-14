@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.15)
 
 project(
     bfi
-    VERSION 2.5.0
+    VERSION 2.7.0
     LANGUAGES C
 )
 
