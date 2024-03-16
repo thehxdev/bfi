@@ -16,7 +16,7 @@ pkgs.mkShell {
     ];
 
     shellHook = ''
-    CC=clang
-    CXX=clang++
+    export CC=clang
+    export CXX=clang++
     '';
 }
