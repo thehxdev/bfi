@@ -30,11 +30,16 @@ To compile with debug information, set `OPTIMIZE` to 0.
 - `SAFE_BFI`: 
 To add memory access protections set `SAFE_BFI` to 1.
 This makes bfi slower but out of range accesses to memory while executing BrainF\*ck source code will be catched.
+(This only affects the interpreter and NOT the compiler!)
+
+- `STATIC`:
+Set `STATIC` option to 1 to build bfi as a standalone, staticly linked binary using [musl libc](https://musl.libc.org/).
+But befor that, make sure that you have `musl-clang` and musl libc installed.
 
 
 To build `bfi`:
 ```bash
-make OPTIMIZE=1 NON_STD=0 SAFE_BFI=0
+make OPTIMIZE=1 STATIC=0 NON_STD=0 SAFE_BFI=0
 ```
 Then you can use `bfi` executable in `build/` directory.
 
