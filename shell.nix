@@ -5,7 +5,6 @@ pkgs.mkShell {
         clang_17
         llvmPackages_17.bintools
         gnumake
-        nasm
 
         ## debugging stuff
         gdb
