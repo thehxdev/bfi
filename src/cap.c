@@ -179,47 +179,6 @@ struct Cap_t {
  * Functionalities
  */
 
-/* Since `free()` ignores NULL pointer, set pointer
- * to NULL to prevent double free */
-#if 0
-static inline void xfree(void *p) {
-    free(p);
-    p = NULL;
-}
-#endif
-
-
-/* Get a character form character array */
-/*
-static inline char __cap_str_getchar(const char *s,
-                                     const size_t slen,
-                                     const long idx)
-{
-    return ((idx >= 0) && (idx < (long)slen)) ? s[idx] : '\0';
-}
-*/
-
-
-/* Get a sub-string from a character array */
-/*
-static char *__cap_str_substr(char *s,
-                              const size_t slen,
-                              const long start,
-                              const long end)
-{
-    if (s == NULL || start >= (long)slen)
-        goto ret;
-
-    s += start;
-    if (end != 0 && end <= (long)slen)
-        s[end] = '\0';
-
-ret:
-    return s;
-}
-*/
-
-
 static void __cap_flag_free(__Cap_Flag_t **flag) {
     __Cap_Flag_t *f = *flag;
     if (f) {
@@ -317,6 +276,9 @@ static __Cap_SCList_t *__cap_sclist_new(const size_t capacity) {
 static __Cap_Subcmd_t *__cap_sclist_find(const __Cap_SCList_t *sclist,
                                          const char *name)
 {
+    if (sclist == NULL)
+        return NULL;
+
     __Cap_Subcmd_t *res = NULL;
     __cap_darr_find(res,
                     tmp,
@@ -375,6 +337,9 @@ static __Cap_FList_t *__cap_flist_new(const size_t capacity) {
 static __Cap_Flag_t *__cap_flist_find(const __Cap_FList_t *fl,
                                       const char *name)
 {
+    if (fl == NULL)
+        return NULL;
+
     __Cap_Flag_t *res = NULL;
     __cap_darr_find(res,
                     tmp,
@@ -549,7 +514,7 @@ int cap_flag_provided(Cap_t *cap,
 
 
 /* remove dashes from beginning of flag name */
-static inline char *__cap_flag_ext_name(char *str) {
+static inline char *__cap_flag_extr_name(char *str) {
     while (*str == '-') str++;
     return str;
 }
@@ -611,21 +576,16 @@ int cap_parse_args(Cap_t *cap) {
 
     for (int i = 0; i < argc; i++) {
         char *curr_arg = argv[i];
-        if (curr_arg[0] == '-') {
-            flag = __cap_flist_find(flist, __cap_flag_ext_name(curr_arg));
+        if (*curr_arg == '-') {
+            flag = __cap_flist_find(flist, __cap_flag_extr_name(curr_arg));
             if (flag == NULL) {
                 CAP_LOG_ERR("%s: Invalid flag: %s\n", __FUNCTION__, curr_arg);
                 continue;
             }
             flag->met = 1;
-
             next_arg = __cap_argv_get(argv, argc, i+1);
-            if (next_arg) {
-                if (*next_arg != '-')
-                    flag->val = next_arg;
-                else
-                    flag->val = NULL;
-            }
+            if (next_arg)
+                flag->val = (*next_arg != '-') ? next_arg : NULL;
         }
     }
 

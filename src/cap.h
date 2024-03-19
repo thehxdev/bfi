@@ -27,7 +27,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define CAP_VERSION "1.0.4"
+#define CAP_VERSION "1.0.5"
 #define CAP_DEINIT __attribute__((cleanup(cap_deinit)))
 
 
@@ -70,6 +70,7 @@ char *cap_flag_getval(Cap_t *cap,
                       const char *name);
 
 
+/* is a flag present in arguments or not */
 int cap_flag_provided(Cap_t *cap,
                       const char *subcmd,
                       const char *name);
@@ -78,8 +79,12 @@ int cap_flag_provided(Cap_t *cap,
 /* get provided sub-command in command-line */
 int cap_subcmd_provided(Cap_t *cap, const char *subcmd);
 
+
+/* get sub-command's arguments as raw arguments */
 Cap_RawArgs_t cap_subcmd_rawargs(Cap_t *cap, const char *subcmd);
 
+
+/* parse the command-line arguments */
 int cap_parse_args(Cap_t *cap);
 
 
