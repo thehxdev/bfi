@@ -11,7 +11,7 @@ BIN := build/bfi
 
 ifeq ($(STATIC), 1)
 	CC := musl-clang
-	LDFLAGS := -static -s
+	LDFLAGS := -static
 endif
 
 ifeq ($(OPTIMIZE), 1)
