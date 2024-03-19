@@ -60,10 +60,10 @@ while you are in the project root directory:
 To compile BrainF\*ck source code to **x64 Assembly** (Nasm compatible), use `-c` and `-o` flag.
 Then you can use `basm.sh` script to build the assembly file.
 ```bash
-# compile `examples/helloWorld.bf` file to `helloWorld.asm`
-./build/bfi -c 'examples/helloWorld.bf' -o './helloWorld.asm'
+# compile `examples/helloWorld.bf` file to `helloWorld.S`
+./build/bfi -asm 'examples/helloWorld.bf' -o './helloWorld.S'
 
-./basm.sh './helloWorld.asm'
+./basm.sh './helloWorld.S'
 ```
 
 ## More Info
