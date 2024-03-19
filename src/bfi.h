@@ -56,7 +56,7 @@ int bf_execute(BF_TokenList **tlp, ubyte **darr);
 int bf_dump_tokens(BF_TokenList **tlp, const char *out_path);
 
 
-/* compile BF source code to x86 nasm compatible assembly */
-int bf_compiler_x64nasm(BF_TokenList **tlp, const char *out_path);
+/* compile BF source code to x64 GNU GCC compatible assembly */
+int bf_compiler_x64gcc(BF_TokenList **tlp, const char *out_path);
 
 #endif /* BFI_BFI_H */

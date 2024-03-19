@@ -7,7 +7,7 @@
 
 
 int main(int argc, char *argv[]) {
-    int err = 0, run = 0, x64nasm = 0;
+    int err = 0, run = 0, x64gcc = 0;
     char *src = NULL, *out = NULL;
     BF_State *bf = NULL;
     Cap_t *cap = cap_init(argc, argv);
@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
     } else if (cap_flag_provided(cap, NULL, "asm")) {
         src = cap_flag_getval(cap, NULL, "asm");
         out = cap_flag_getval(cap, NULL, "o");
-        x64nasm = 1;
+        x64gcc = 1;
     } else {
         BF_LOG_ERR("Invalid command-line arguments\n", NULL);
         BF_LOG_ERR("Stopping bfi...\n", NULL);
@@ -51,8 +51,8 @@ int main(int argc, char *argv[]) {
 
     if (run)
         err = bf_execute(&bf->tl, &bf->arr);
-    else if (x64nasm)
-        err = bf_compiler_x64nasm(&bf->tl, out);
+    else if (x64gcc)
+        err = bf_compiler_x64gcc(&bf->tl, out);
 
 exit:
     bf_deinit(&bf);
