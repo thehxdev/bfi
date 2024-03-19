@@ -9,6 +9,10 @@ SRC_FILES := $(wildcard $(SRC_DIR)/*.c)
 OBJ_FILES := $(SRC_FILES:.c=.o)
 BIN := build/bfi
 
+ifeq ($(STATIC), 1)
+	CC := musl-clang
+	LDFLAGS := -static -s
+endif
 
 ifeq ($(OPTIMIZE), 1)
 	CFLAGS += -O2 -DNDEBUG
