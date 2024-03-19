@@ -65,13 +65,14 @@ while you are in the project root directory:
 > [!NOTE]
 > The non-standard commands (see `NON_STD` in build section) are not impelemted in compiler.
 
-To compile BrainF\*ck source code to **x64 Assembly** ([Nasm](https://www.nasm.us/) compatible), use `-asm` and `-o` flag.
-Then you can use `basm.sh` script to build the assembly file.
+To compile BrainF\*ck source code to **x64 Assembly** (AT&T Syntax), use `-asm` and `-o` flag.
+Then you can use `gcc` to build the executable from generated assembly file.
 ```bash
 # compile `examples/helloWorld.bf` file to `helloWorld.S`
 ./build/bfi -asm 'examples/helloWorld.bf' -o './helloWorld.S'
 
-./basm.sh './helloWorld.S'
+# assemble `helloWorld.S` file
+gcc './helloWorld.S'
 ```
 
 ## More Info
