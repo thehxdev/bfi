@@ -37,16 +37,16 @@ Set `STATIC` option to 1 to build bfi as a standalone, staticly linked binary us
 But befor that, make sure that you have `musl-clang` and musl libc installed.
 
 
-To build `bfi`:
+### Build bfi
+Build bfi using the folloing command:
 ```bash
-make OPTIMIZE=1 STATIC=0 NON_STD=0 SAFE_BFI=0
+make OPTIMIZE=1
 ```
 Then you can use `bfi` executable in `build/` directory.
 
 
 
 ## Usage
-
 You can use `bfi` as an interpreter or a compiler.
 
 
