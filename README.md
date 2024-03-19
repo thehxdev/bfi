@@ -17,31 +17,25 @@ git clone --depth=1 --branch=main https://github.com/thehxdev/bfi
 cd bfi
 ```
 
-Make sure that you have a C compiler like `gcc` or `clang`, `cmake` and `make` installed.
+Make sure that you have a C compiler like `gcc` or `clang` and `make` installed.
 
-### Cmake build options:
-- `NON_STD_CMDS`: 
-You can set `-DNON_STD_CMDS` to 1 if you want the commands that I added to `bfi` like `?` command.
-otherwise `bfi` acts like a standard BrainF*ck interpreter
-with no extra commands.
+### make build options:
+- `NON_STD`: 
+You can set `NON_STD` to 1 if you want the commands that I added to `bfi` like `?` command.
+otherwise `bfi` acts like a standard BrainF\*ck interpreter with no extra commands.
 
 - `OPTIMIZE`: 
-To compile with debug information, set `-DOPTIMIZE` to 0.
+To compile with debug information, set `OPTIMIZE` to 0.
 
 - `SAFE_BFI`: 
-To add memory access protections set `-DSAFE_BFI` to 1.
+To add memory access protections set `SAFE_BFI` to 1.
 This makes bfi slower but out of range accesses to memory while executing BrainF\*ck source code will be catched.
 
 
 To build `bfi`:
 ```bash
-mkdir -p build/
-
-cmake -DNON_STD_CMDS=0 -DSAFE_BFI=0 -DOPTIMIZE=1 -B build/ -S .
-
-cmake --build build/
+make OPTIMIZE=1 NON_STD=0 SAFE_BFI=0
 ```
-
 Then you can use `bfi` executable in `build/` directory.
 
 
@@ -86,7 +80,7 @@ Then you can use `basm.sh` script to build the assembly file.
 - `]` : jump to next command of matching `[` (goes backward), if the data pointer's data is non-zero
 
 
-If you bulid `bfi` with `-DNON_STD_CMDS=1` flag (see Build section), you have access to more commands
+If you bulid `bfi` with `NON_STD=1` flag (see Build section), you have access to more commands
 that I added to `bfi`:
 
 - `?` : reset everything to initial state (set all data to 0 and rewind data pointer).
