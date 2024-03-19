@@ -10,18 +10,18 @@ OBJ_FILES := $(SRC_FILES:.c=.o)
 BIN := build/bfi
 
 
-ifdef OPTIMIZE
+ifeq ($(OPTIMIZE), 1)
 	CFLAGS += -O2 -DNDEBUG
 	LDFLAGS += -s
 else
 	CFLAGS += -Og -ggdb
 endif
 
-ifdef SAFE_BFI
+ifeq ($(SAFE_BFI), 1)
 	CFLAGS += -DSAFE_BFI=1
 endif
 
-ifdef NON_STD
+ifeq ($(NON_STD), 1)
 	CFLAGS += -DNON_STD_CMDS=1
 endif
 
