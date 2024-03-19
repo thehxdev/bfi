@@ -321,48 +321,48 @@ int bf_compiler_x64gcc(BF_TokenList **tlp, const char *out_path) {
             "movq\t%%rax, -8(%%rbp)\n\t"
             "cmpq\t$0, %%rax\n\t"
             "je\t\t_exit\n\t"
-            "movq\t%%rax, %%"BF_GEN_ARR_REG"\n\n\t"
+            "movq\t%%rax, %%"BF_GEN_ARR_REG"\n\n"
             );
 
     while (t) {
         switch (t->op) {
             case CMD_INC_DP: {
                 if (t->repeat == 1)
-                    fprintf(fp, "incq\t%%"BF_GEN_ARR_REG"\n\t");
+                    fprintf(fp, "\tincq\t%%"BF_GEN_ARR_REG"\n");
                 else
-                    fprintf(fp, "addq\t$%zu, %%"BF_GEN_ARR_REG"\n\t", t->repeat);
+                    fprintf(fp, "\taddq\t$%zu, %%"BF_GEN_ARR_REG"\n", t->repeat);
             }
             break;
 
             case CMD_DEC_DP: {
                 if (t->repeat == 1)
-                    fprintf(fp, "decq\t%%"BF_GEN_ARR_REG"\n\t");
+                    fprintf(fp, "\tdecq\t%%"BF_GEN_ARR_REG"\n");
                 else
-                    fprintf(fp, "subq\t$%zu, %%"BF_GEN_ARR_REG"\n\t", t->repeat);
+                    fprintf(fp, "\tsubq\t$%zu, %%"BF_GEN_ARR_REG"\n", t->repeat);
             }
             break;
 
             case CMD_INC_VAL: {
                 if (t->repeat == 1)
-                    fprintf(fp, "incb\t(%%"BF_GEN_ARR_REG")\n\t");
+                    fprintf(fp, "\tincb\t(%%"BF_GEN_ARR_REG")\n");
                 else
-                    fprintf(fp, "addb\t$%zu, (%%"BF_GEN_ARR_REG")\n\t", t->repeat);
+                    fprintf(fp, "\taddb\t$%zu, (%%"BF_GEN_ARR_REG")\n", t->repeat);
             }
             break;
 
             case CMD_DEC_VAL: {
                 if (t->repeat == 1)
-                    fprintf(fp, "decb\t(%%"BF_GEN_ARR_REG")\n\t");
+                    fprintf(fp, "\tdecb\t(%%"BF_GEN_ARR_REG")\n");
                 else
-                    fprintf(fp, "subb\t$%zu, (%%"BF_GEN_ARR_REG")\n\t", t->repeat);
+                    fprintf(fp, "\tsubb\t$%zu, (%%"BF_GEN_ARR_REG")\n", t->repeat);
             }
             break;
 
             case CMD_OUTPUT: {
                 for (i = 0; i < t->repeat; i++) {
                     fprintf(fp,
-                            "movb\t(%%"BF_GEN_ARR_REG"), %%dil\n\t"
-                            "callq\tputchar\n\t");
+                            "\tmovb\t(%%"BF_GEN_ARR_REG"), %%dil\n"
+                            "\tcallq\tputchar\n");
                 }
             }
             break;
@@ -370,8 +370,8 @@ int bf_compiler_x64gcc(BF_TokenList **tlp, const char *out_path) {
             case CMD_INPUT: {
                 for (i = 0; i < t->repeat; i++) {
                     fprintf(fp,
-                            "callq\tgetchar\n\t"
-                            "movb\t(%%"BF_GEN_ARR_REG"), %%al\n\t");
+                            "\tcallq\tgetchar\n"
+                            "\tmovb\t(%%"BF_GEN_ARR_REG"), %%al\n");
                 }
             }
             break;
@@ -379,9 +379,9 @@ int bf_compiler_x64gcc(BF_TokenList **tlp, const char *out_path) {
             case CMD_JUMP_F: {
                 m_t = tl->tokens[t->m_idx];
                 fprintf(fp,
-                        ".L%ld:\n\t"
-                        "cmpb\t$0, (%%"BF_GEN_ARR_REG")\n\t"
-                        "je\t\t.L%ld\n\t",
+                        ".L%ld:\n"
+                        "\tcmpb\t$0, (%%"BF_GEN_ARR_REG")\n"
+                        "\tje\t\t.L%ld\n",
                         m_t->m_idx,
                         t->m_idx);
             }
@@ -390,9 +390,9 @@ int bf_compiler_x64gcc(BF_TokenList **tlp, const char *out_path) {
             case CMD_JUMP_B: {
                 m_t = tl->tokens[t->m_idx];
                 fprintf(fp,
-                        "cmpb\t$0, (%%"BF_GEN_ARR_REG")\n\t"
-                        "jne\t\t.L%ld\n"
-                        ".L%ld:\n\t",
+                        "\tcmpb\t$0, (%%"BF_GEN_ARR_REG")\n"
+                        "\tjne\t\t.L%ld\n"
+                        ".L%ld:\n",
                         t->m_idx,
                         m_t->m_idx);
             }
