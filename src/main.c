@@ -10,7 +10,6 @@ int main(int argc, char *argv[]) {
     int err = 0, run = 0, x64asm = 0;
     char *src = NULL, *out = NULL;
     BF_State *bf = NULL;
-    void *darr_ptr;
     Cap_t *cap = cap_init(argc, argv);
 
     (void)cap_register_flag(cap, NULL, "r", "Run a source file directly.");
@@ -30,11 +29,9 @@ int main(int argc, char *argv[]) {
     }
 
 
-    if (cap_flag_provided(cap, NULL, "r")) {
-        src  = cap_flag_getval(cap, NULL, "r");
+    if ((src = cap_flag_getval(cap, NULL, "r"))) {
         run  = 1;
-    } else if (cap_flag_provided(cap, NULL, "asm")) {
-        src = cap_flag_getval(cap, NULL, "asm");
+    } else if ((src = cap_flag_getval(cap, NULL, "asm"))) {
         out = cap_flag_getval(cap, NULL, "o");
         x64asm = 1;
     } else {
@@ -51,8 +48,7 @@ int main(int argc, char *argv[]) {
     }
 
     if (run) {
-        darr_ptr = bf_init_data_array(&bf->arr);
-        if (darr_ptr == NULL)
+        if ((bf_init_data_array(&bf->arr)) == NULL)
             goto exit;
         err = bf_execute(&bf->tl, &bf->arr);
     } else if (x64asm)
