@@ -44,6 +44,10 @@ typedef struct __bf_state {
 BF_State *bf_init(const char *s_path);
 
 
+/* initialize BF data array */
+void *bf_init_data_array(ubyte **arr);
+
+
 /* deinit BF */
 void bf_deinit(BF_State **bfp);
 

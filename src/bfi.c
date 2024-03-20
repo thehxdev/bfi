@@ -118,11 +118,6 @@ BF_State *bf_init(const char *s_path) {
     if (!bfs)
         return NULL;
 
-    bfs->arr = (ubyte*) calloc(__BF_ARR_CAP, sizeof(ubyte));
-    if (!bfs->arr) {
-        BF_LOG_ERR("%s: Allocating memory for BF data array failed\n", __FUNCTION__);
-        return NULL;
-    }
     bfs->cmds_c = 0;
 
     /* read the source file, removed any unnecessary character
@@ -146,6 +141,16 @@ BF_State *bf_init(const char *s_path) {
      * them anymore */
     xfree(bfs->cmds);
     return bfs;
+}
+
+
+void *bf_init_data_array(ubyte **arr) {
+    *arr = (ubyte*) calloc(__BF_ARR_CAP, sizeof(ubyte));
+    if (!*arr) {
+        BF_LOG_ERR("%s: Allocating memory for BF data array failed\n", __FUNCTION__);
+        return NULL;
+    }
+    return *arr;
 }
 
 

@@ -10,6 +10,7 @@ int main(int argc, char *argv[]) {
     int err = 0, run = 0, x64asm = 0;
     char *src = NULL, *out = NULL;
     BF_State *bf = NULL;
+    void *darr_ptr;
     Cap_t *cap = cap_init(argc, argv);
 
     (void)cap_register_flag(cap, NULL, "r", "Run a source file directly.");
@@ -49,9 +50,12 @@ int main(int argc, char *argv[]) {
         goto exit;
     }
 
-    if (run)
+    if (run) {
+        darr_ptr = bf_init_data_array(&bf->arr);
+        if (darr_ptr == NULL)
+            goto exit;
         err = bf_execute(&bf->tl, &bf->arr);
-    else if (x64asm)
+    } else if (x64asm)
         err = bf_compiler_x64gcc(&bf->tl, out);
 
 exit:
