@@ -48,11 +48,7 @@ static int __bf_tokenlist_append(BF_TokenList *bf_tlp, const BF_Token *bf_tp) {
     }
 
     BF_Token **t = &bf_tlp->tokens[bf_tlp->len];
-    *t = malloc(sizeof(BF_Token));
-    if (!(*t))
-        return 1;
-
-    memmove(*t, bf_tp, sizeof(BF_Token));
+    *t = (BF_Token*)bf_tp;
     bf_tlp->len += 1;
     return 0;
 }
@@ -147,7 +143,6 @@ BF_TokenList *__bf_scan_cmds(const char *bf_cmds, const size_t len) {
         }
 
         __bf_tokenlist_append(tl, (const BF_Token*)tmp_t);
-        xfree(tmp_t);
     }
 
     __bf_tokenlist_add_null(tl);
