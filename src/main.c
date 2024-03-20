@@ -3,11 +3,11 @@
 #include "bfi.h"
 
 
-#define BFI_VERSION "2.7.1"
+#define BFI_VERSION "2.7.2"
 
 
 int main(int argc, char *argv[]) {
-    int err = 0, run = 0, x64gcc = 0;
+    int err = 0, run = 0, x64asm = 0;
     char *src = NULL, *out = NULL;
     BF_State *bf = NULL;
     Cap_t *cap = cap_init(argc, argv);
@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
     } else if (cap_flag_provided(cap, NULL, "asm")) {
         src = cap_flag_getval(cap, NULL, "asm");
         out = cap_flag_getval(cap, NULL, "o");
-        x64gcc = 1;
+        x64asm = 1;
     } else {
         BF_LOG_ERR("Invalid command-line arguments\n", NULL);
         BF_LOG_ERR("Stopping bfi...\n", NULL);
@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
 
     if (run)
         err = bf_execute(&bf->tl, &bf->arr);
-    else if (x64gcc)
+    else if (x64asm)
         err = bf_compiler_x64gcc(&bf->tl, out);
 
 exit:
