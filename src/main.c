@@ -3,7 +3,7 @@
 #include "bfi.h"
 
 
-#define BFI_VERSION "2.7.4"
+#define BFI_VERSION "2.7.5"
 
 
 int main(int argc, char *argv[]) {
