@@ -301,16 +301,20 @@ int bf_dump_tokens(BF_TokenList **tlp, const char *out_path) {
 
 
 int bf_compiler_x64gcc(BF_TokenList **tlp, const char *out_path) {
+    FILE *fp;
     size_t i;
     BF_TokenList *tl = *tlp;
     register BF_Token **tks = tl->tokens, *t = *tks, *m_t;
 
-    FILE *fp = fopen(out_path, "w");
-    if (!fp) {
-        fprintf(stderr, "[ERROR] Could not open output file: ");
-        perror(NULL);
-        return 1;
-    }
+    if (out_path) {
+        fp = fopen(out_path, "w");
+        if (!fp) {
+            fprintf(stderr, "[ERROR] Could not open output file: ");
+            perror(NULL);
+            return 1;
+        }
+    } else
+        fp = stdout;
 
     fprintf(fp,
             ".equ\tBF_ARR_LEN, 0x10000\n\n"
