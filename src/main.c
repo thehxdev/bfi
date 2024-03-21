@@ -10,7 +10,7 @@
 #include "compiler.h"
 
 
-#define BFI_VERSION "2.7.5"
+#define BFI_VERSION "2.7.6"
 
 void usage(void);
 
