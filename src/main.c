@@ -12,6 +12,7 @@
 
 #define BFI_VERSION "2.7.5"
 
+void usage(void);
 
 int main(int argc, char *argv[]) {
     int err = 0, run = 0, x64asm = 0;
@@ -25,13 +26,7 @@ int main(int argc, char *argv[]) {
 
     err = cap_parse_args(cap);
     if (err) {
-        fprintf(stderr,
-                "BFI v" BFI_VERSION " - https://github.com/thehxdev/bfi\n"
-                "Cap v" CAP_VERSION " - https://github.com/thehxdev/cap\n"
-                "Usage:\n"
-                "\tInterpreter: bfi -r <source-code-path>\n"
-                "\tx86 ASM Compiler: bfi -asm <source-code-path> -o <output-file-path>\n"
-                );
+        usage();
         goto exit;
     }
 
@@ -44,6 +39,7 @@ int main(int argc, char *argv[]) {
     } else {
         BF_LOG_ERR("Invalid command-line arguments\n", NULL);
         BF_LOG_ERR("Stopping bfi...\n", NULL);
+        usage();
         goto exit;
     }
 
@@ -65,4 +61,15 @@ exit:
     bf_deinit(&bf);
     cap_deinit(&cap);
     return err;
+}
+
+
+void usage(void) {
+    fprintf(stderr,
+            "BFI v" BFI_VERSION " - https://github.com/thehxdev/bfi\n"
+            "Cap v" CAP_VERSION " - https://github.com/thehxdev/cap\n"
+            "Usage:\n"
+            "\tInterpreter: bfi -r <source-code-path>\n"
+            "\tx86 ASM Compiler: bfi -asm <source-code-path> -o <output-file-path>\n"
+            );
 }
