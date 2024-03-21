@@ -1,6 +1,13 @@
 #include <stdio.h>
+
+/* Cap */
 #include "cap.h"
+
+/* BFI */
 #include "bfi.h"
+#include "log.h"
+#include "interpreter.h"
+#include "compiler.h"
 
 
 #define BFI_VERSION "2.7.5"

@@ -1,8 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <memory.h>
 #include "scanner.h"
 #include "xmem.h"
+
 
 static inline BF_Token *__bf_tokenlist_get(const BF_TokenList *bf_tlp, const long idx) {
     return (idx >= 0 && idx < (long)bf_tlp->len) ? bf_tlp->tokens[idx] : NULL;
