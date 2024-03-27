@@ -14,9 +14,11 @@ static BF_Token *__bf_token_new(const char cmd) {
     if (!t)
         return NULL;
 
-    t->op = cmd;
-    t->repeat = 1;
-    t->m_idx = 0;
+    *t = (BF_Token) {
+        .op = cmd,
+        .repeat = 1,
+        .m_idx = 0,
+    };
     return t;
 }
 
@@ -27,9 +29,11 @@ static BF_TokenList *__bf_tokenlist_new(const size_t cap) {
     if (!tl)
         return NULL;
 
-    tl->len = 0;
-    tl->cap = cap;
-    tl->tokens = NULL;
+    *tl = (BF_TokenList) {
+        .len = 0,
+        .cap = cap,
+        .tokens = NULL,
+    };
     return tl;
 }
 
