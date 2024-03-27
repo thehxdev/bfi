@@ -39,7 +39,7 @@ typedef struct __bf_token {
 
     /* to handle '[' and ']' commands,
      * store the matching ones index in
-     * each other for constatn time jumps.
+     * each other for constant time jumps.
      * For other commands this will be 0.
      * m_idx -> matching_index */
     long m_idx;
