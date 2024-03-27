@@ -1,8 +1,8 @@
 # BFI
 
-BFI is a BrainF\*ck interpreter and compiler written in C and compatible with C99 standard.
+BFI is a fast and efficient BrainFuck interpreter and compiler written in C and compatible with C99 standard.
 
-For more information about BrainF\*ck read the [BrainF\*ck wikipedia page](https://en.wikipedia.org/wiki/Brainfuck).
+For more information about BrainFuck read the [BrainFuck wikipedia page](https://en.wikipedia.org/wiki/Brainfuck).
 
 You can find more complex and interesting examples in [brainfuck.org](https://brainfuck.org) website.
 download `*.b` source files and execute them with BFI.
@@ -22,14 +22,14 @@ Make sure that you have a C compiler like `gcc` or `clang` and `make` installed.
 ### make build options:
 - `NON_STD`: 
 You can set `NON_STD` to 1 if you want the commands that I added to `bfi` like `?` command.
-otherwise `bfi` acts like a standard BrainF\*ck interpreter with no extra commands.
+otherwise `bfi` acts like a standard BrainFuck interpreter with no extra commands.
 
 - `OPTIMIZE`: 
 To compile with debug information, set `OPTIMIZE` to 0.
 
 - `SAFE_BFI`: 
 To add memory access protections set `SAFE_BFI` to 1.
-This makes bfi slower but out of range accesses to memory while executing BrainF\*ck source code will be catched.
+This makes bfi slower but out of range accesses to memory while executing BrainFuck source code will be catched.
 (This only affects the interpreter and NOT the compiler!)
 
 - `STATIC`:
@@ -65,7 +65,7 @@ while you are in the project root directory:
 > [!NOTE]
 > The non-standard commands (see `NON_STD` in build section) are not impelemted in compiler.
 
-To compile BrainF\*ck source code to **x64 Assembly** (AT&T Syntax), use `-asm` and `-o` flag.
+To compile BrainFuck source code to **x64 Assembly** (AT&T Syntax), use `-asm` and `-o` flag.
 Then you can use `gcc` to build the executable from generated assembly file.
 ```bash
 # compile `examples/helloWorld.bf` file to `helloWorld.S`
@@ -77,7 +77,7 @@ gcc './helloWorld.S'
 
 ## More Info
 
-bfi ignores all characters that are not a valid BrainF\*ck command. BrainF\*ck has only 8 commands:
+bfi ignores all characters that are not a valid BrainFuck command. BrainFuck has only 8 commands:
 
 - `>` : increment data pointer by one
 - `<` : decrement data pointer by one
@@ -89,7 +89,7 @@ bfi ignores all characters that are not a valid BrainF\*ck command. BrainF\*ck h
 - `]` : jump to next command of matching `[` (goes backward), if the data pointer's data is non-zero
 
 
-If you bulid `bfi` with `NON_STD=1` flag (see Build section), you have access to more commands
+If you built `bfi` with `NON_STD=1` flag (see [Build](#Build) section), you have access to more commands
 that I added to `bfi`:
 
 - `?` : reset everything to initial state (set all data to 0 and rewind data pointer).
