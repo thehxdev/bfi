@@ -25,9 +25,6 @@ enum __BF_CMD {
     CMD_INPUT   = ',',
     CMD_JUMP_F  = '[', /* jump forward, if data pointer is zero */
     CMD_JUMP_B  = ']', /* jump backward, if data pointer is not zero */
-#ifdef NON_STD_CMDS
-    CMD_CLEAR   = '?',
-#endif /* NON_STD_CMDS */
 };
 
 
@@ -48,7 +45,7 @@ typedef struct __bf_token {
 
 /* a dynamic array of tokens */
 typedef struct __bf_tokenlist {
-    BF_Token **tokens;
+    BF_Token *tokens;
     size_t len;
     size_t cap;
 } BF_TokenList;

@@ -13,9 +13,6 @@
 
 /* `BF_State` type to store the state of interpreter */
 typedef struct __bf_state {
-    /* data array */
-    ubyte *arr;
-
     /* BF commands that read from a source file */
     char *cmds;
 

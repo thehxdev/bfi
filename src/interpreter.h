@@ -4,9 +4,6 @@
 #include "types.h"
 
 /* execute BF commands */
-int bf_execute(BF_TokenList **tlp, ubyte **darr);
-
-/* initialize BF data array */
-void *bf_init_data_array(ubyte **arr);
+int bf_execute(BF_TokenList *tlp);
 
 #endif /* BFI_INTERPTRETER_H */

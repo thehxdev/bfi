@@ -21,9 +21,6 @@ static size_t __bf_source_file_cmds_count(FILE *fp) {
      * that are not a valid BrainFuck command. */
     while ((ch = fgetc(fp)) != EOF) {
         switch (ch) {
-#ifdef NON_STD_CMDS
-            case '?':
-#endif /* NON_STD_CMDS */
             case '>':
             case '<':
             case '+':
@@ -62,9 +59,6 @@ static int __bf_read_source_file(char **buff, size_t *len, const char *path) {
 
     while ((ch = fgetc(fp)) != EOF) {
         switch (ch) {
-#ifdef NON_STD_CMDS
-            case '?':
-#endif /* NON_STD_CMDS */
             case '>':
             case '<':
             case '+':
@@ -147,7 +141,6 @@ void bf_deinit(BF_State **bfp) {
     BF_State *tmp = *bfp;
     if (tmp) {
         xfree(tmp->cmds);
-        xfree(tmp->arr);
         __bf_tokenlist_free(tmp->tl);
         xfree(tmp);
     }
