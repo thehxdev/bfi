@@ -9,13 +9,14 @@ SRC_FILES := $(wildcard $(SRC_DIR)/*.c)
 OBJ_FILES := $(SRC_FILES:.c=.o)
 BIN := build/bfi
 
+
 ifeq ($(STATIC), 1)
 	CC := musl-clang
 	LDFLAGS := -static
 endif
 
 ifeq ($(OPTIMIZE), 1)
-	CFLAGS += -O2 -DNDEBUG
+	CFLAGS += -O3 -DNDEBUG
 	LDFLAGS += -s
 else
 	CFLAGS += -Og -ggdb
@@ -23,10 +24,6 @@ endif
 
 ifeq ($(SAFE_BFI), 1)
 	CFLAGS += -DSAFE_BFI=1
-endif
-
-ifeq ($(NON_STD), 1)
-	CFLAGS += -DNON_STD_CMDS=1
 endif
 
 
