@@ -1,6 +1,6 @@
 # BFI
 
-BFI is a fast and efficient BrainFuck interpreter and compiler written in C and compatible with C99 standard.
+BFI is a fast and performant BrainFuck interpreter and compiler written in C (C99).
 
 For more information about BrainFuck read the [BrainFuck wikipedia page](https://en.wikipedia.org/wiki/Brainfuck).
 
