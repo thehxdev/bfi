@@ -1,5 +1,5 @@
-CC := cc
-CFLAGS := -Wall -Wextra -Wno-unused-result
+CC ?= cc
+CFLAGS := -std=c99 -Wall -Wextra -Wno-unused-result
 LDFLAGS :=
 LIBS :=
 
