@@ -23,9 +23,9 @@ Make sure that you have a C compiler like `gcc` or `clang` and `make` installed.
 - `OPTIMIZE`: 
 To compile with debug information, set `OPTIMIZE` to 0.
 
-- `SAFE_BFI`: 
-To add memory access protections set `SAFE_BFI` to 1.
-This makes bfi slower but out of range accesses to memory while executing BrainFuck source code will be catched.
+- `SAFE`: 
+To add memory access protections set `SAFE` to 1.
+This makes bfi (a little) slower but out of range accesses to memory while executing BrainFuck source code will be catched.
 (This only affects the interpreter and NOT the compiler!)
 
 - `STATIC`:

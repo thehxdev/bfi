@@ -22,7 +22,7 @@ else
 	CFLAGS += -Og -ggdb
 endif
 
-ifeq ($(SAFE_BFI), 1)
+ifeq ($(SAFE), 1)
 	CFLAGS += -DSAFE_BFI=1
 endif
 
