@@ -126,7 +126,7 @@ int bf_compiler_x64gcc(BF_TokenList *tlp, const char *out_path) {
             "leave\n\t"
             "movq\t$0, %%rdi\n\t"
             "retq\n\n"
-            ".section .note.GNU-stack,\"\",@progbits"
+            ".section .note.GNU-stack,\"\",@progbits\n"
             );
 
     fclose(fp);
