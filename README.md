@@ -54,7 +54,7 @@ while you are in the project root directory:
 ```bash
 # run `examples/helloWorld.bf` file
 # this will print `Hello World!` to stdout
-./build/bfi -r 'examples/helloWorld.bf'
+./build/bfi 'examples/helloWorld.bf'
 ```
 
 ### Compiler
