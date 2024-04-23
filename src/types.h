@@ -7,8 +7,8 @@
 /* ubyte -> an unsigned 8 bit integer
  * byte -> a signed 8 bit integer */
 #if !defined(ubyte) && !defined(byte)
-# define byte char
-# define ubyte unsigned char
+    #define byte char
+    #define ubyte unsigned char
 #endif /* byte */
 
 
