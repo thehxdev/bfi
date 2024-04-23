@@ -4,12 +4,14 @@
 #include "xmem.h"
 
 
-static inline BF_Token *__bf_tokenlist_get(const BF_TokenList *bf_tlp, const long idx) {
+static inline __attribute__((always_inline))
+BF_Token *__bf_tokenlist_get(const BF_TokenList *bf_tlp, const long idx) {
     return (idx >= 0 && idx < (long)bf_tlp->len) ? &bf_tlp->tokens[idx] : NULL;
 }
 
 /* create a new token */
-static BF_Token __bf_token_new(const char cmd) {
+static inline __attribute__((always_inline))
+BF_Token __bf_token_new(const char cmd) {
     return (BF_Token) {
         .op = cmd,
         .repeat = 1,
@@ -46,8 +48,7 @@ static int __bf_tokenlist_append(BF_TokenList *bf_tlp, const BF_Token *bf_tp) {
             return 1;
     }
 
-    bf_tlp->tokens[bf_tlp->len] = *bf_tp;
-    bf_tlp->len += 1;
+    bf_tlp->tokens[bf_tlp->len++] = *bf_tp;
     return 0;
 }
 
@@ -102,7 +103,8 @@ static BF_Token *__bf_find_opening_bracket(const BF_TokenList *bf_tlp, long *m_i
 }
 
 
-static inline char __bf_cmds_get(const char *bf_cmds, const size_t len, const long idx) {
+static inline __attribute__((always_inline))
+char __bf_cmds_get(const char *bf_cmds, const size_t len, const long idx) {
     return (idx >= 0 && idx < (long)len) ? bf_cmds[idx] : '\0';
 }
 
