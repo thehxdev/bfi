@@ -45,7 +45,7 @@ static int __bf_read_source_file(char **buff, size_t *len, const char *path) {
     size_t i = 0;
     FILE *fp = fopen(path, "rb");
     if (!fp) {
-        BF_LOG_ERR("%s: Could not open source file: ", __FUNCTION__);
+        BF_LOG_ERR("Could not open source file: ", NULL);
         perror(NULL);
         return 1;
     }
@@ -53,7 +53,7 @@ static int __bf_read_source_file(char **buff, size_t *len, const char *path) {
     *len = __bf_source_file_cmds_count(fp);
     *buff = (char*) calloc((*len) + 1, 1);
     if (!(*buff)) {
-        BF_LOG_ERR("%s: Allocating memory for BF commands failed\n", __FUNCTION__);
+        BF_LOG_ERR("Allocating memory for BF commands failed\n", NULL);
         return 1;
     }
 
@@ -85,7 +85,7 @@ static int __bf_check_matching_brackets(char *cmds) {
         if (c == '[') {
             nest += 1;
         } else if (c == ']' && nest == 0) {
-            BF_LOG_ERR("%s: Extra \']\' command found\n", __FUNCTION__);
+            BF_LOG_ERR("Extra \']\' command found\n", NULL);
             return 1;
         } else if (c == ']' && nest > 0) {
             nest -= 1;
@@ -97,7 +97,7 @@ static int __bf_check_matching_brackets(char *cmds) {
      * nesting is greater than 0, indicates
      * extra `[` character are used */
     if (nest > 0) {
-        BF_LOG_ERR("%s: Extra \'[\' commands found\n", __FUNCTION__);
+        BF_LOG_ERR("Extra \'[\' commands found\n", NULL);
         return 1;
     }
 
@@ -126,7 +126,7 @@ BF_State *bf_init(const char *s_path) {
     /* tokenize the commands */
     bfs->tl = __bf_scan_cmds(bfs->cmds, bfs->cmds_c);
     if (!bfs->tl) {
-        BF_LOG_ERR("%s: Scanning BF commands failed\n", __FUNCTION__);
+        BF_LOG_ERR("Scanning BF commands failed\n", NULL);
         return NULL;
     }
 

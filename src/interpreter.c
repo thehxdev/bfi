@@ -58,14 +58,14 @@ int bf_execute(BF_TokenList *tlp) {
 
 #ifdef SAFE_BFI
             default:
-                BF_LOG_ERR("%s: Invalid BF Token\n", __FUNCTION__);
+                BF_LOG_ERR("Invalid BF Token\n", NULL);
                 return 1;
 #endif /* SAFE_BFI */
         } /* End switch(t->op) */
 
 #ifdef SAFE_BFI
         if (ptr < 0 || ptr >= __BF_ARR_CAP) {
-            BF_LOG_ERR("%s: Out of range access to data array\n", __FUNCTION__);
+            BF_LOG_ERR("Out of range access to data array\n", NULL);
             return 1;
         }
 #endif /* SAFE_BFI */
