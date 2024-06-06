@@ -1,10 +1,11 @@
 #include <stdio.h>
-#include <stdlib.h>
 
 /* BFI */
 #include "scanner.h"
 #include "interpreter.h"
-#include "log.h"
+#ifdef SAFE_BFI
+    #include "log.h"
+#endif // SAFE_BFI
 
 
 /* Capacity of BrainFuck data array */
