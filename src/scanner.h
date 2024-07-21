@@ -32,22 +32,22 @@ typedef struct __bf_token {
     enum __BF_CMD op;
 
     /* how many times a command repeated in a row? */
-    size_t repeat;
+    unsigned int repeat;
 
     /* to handle '[' and ']' commands,
      * store the matching ones index in
      * each other for constant time jumps.
      * For other commands this will be 0.
      * m_idx -> matching_index */
-    long m_idx;
+    unsigned int m_idx;
 } BF_Token;
 
 
 /* a dynamic array of tokens */
 typedef struct __bf_tokenlist {
     BF_Token *tokens;
-    size_t len;
-    size_t cap;
+    unsigned int len;
+    unsigned int cap;
 } BF_TokenList;
 
 
