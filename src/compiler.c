@@ -48,7 +48,7 @@ int bf_compiler_x64gcc(BF_TokenList *tlp, const char *out_path) {
                 if (t.repeat == 1)
                     fprintf(fp, "\tincq\t%%"BF_GEN_REG"\n");
                 else
-                    fprintf(fp, "\taddq\t$%zu, %%"BF_GEN_REG"\n", t.repeat);
+                    fprintf(fp, "\taddq\t$%u, %%"BF_GEN_REG"\n", t.repeat);
             }
             break;
 
@@ -56,7 +56,7 @@ int bf_compiler_x64gcc(BF_TokenList *tlp, const char *out_path) {
                 if (t.repeat == 1)
                     fprintf(fp, "\tdecq\t%%"BF_GEN_REG"\n");
                 else
-                    fprintf(fp, "\tsubq\t$%zu, %%"BF_GEN_REG"\n", t.repeat);
+                    fprintf(fp, "\tsubq\t$%u, %%"BF_GEN_REG"\n", t.repeat);
             }
             break;
 
@@ -64,7 +64,7 @@ int bf_compiler_x64gcc(BF_TokenList *tlp, const char *out_path) {
                 if (t.repeat == 1)
                     fprintf(fp, "\tincb\t(%%"BF_GEN_REG")\n");
                 else
-                    fprintf(fp, "\taddb\t$%zu, (%%"BF_GEN_REG")\n", t.repeat);
+                    fprintf(fp, "\taddb\t$%u, (%%"BF_GEN_REG")\n", t.repeat);
             }
             break;
 
@@ -72,7 +72,7 @@ int bf_compiler_x64gcc(BF_TokenList *tlp, const char *out_path) {
                 if (t.repeat == 1)
                     fprintf(fp, "\tdecb\t(%%"BF_GEN_REG")\n");
                 else
-                    fprintf(fp, "\tsubb\t$%zu, (%%"BF_GEN_REG")\n", t.repeat);
+                    fprintf(fp, "\tsubb\t$%u, (%%"BF_GEN_REG")\n", t.repeat);
             }
             break;
 
@@ -97,9 +97,9 @@ int bf_compiler_x64gcc(BF_TokenList *tlp, const char *out_path) {
             case CMD_JUMP_F: {
                 m_t = &tlp->tokens[t.m_idx];
                 fprintf(fp,
-                        ".L%ld:\n"
+                        ".L%u:\n"
                         "\tcmpb\t$0, (%%"BF_GEN_REG")\n"
-                        "\tje\t\t.L%ld\n",
+                        "\tje\t\t.L%u\n",
                         m_t->m_idx,
                         t.m_idx);
             }
@@ -109,8 +109,8 @@ int bf_compiler_x64gcc(BF_TokenList *tlp, const char *out_path) {
                 m_t = &tlp->tokens[t.m_idx];
                 fprintf(fp,
                         "\tcmpb\t$0, (%%"BF_GEN_REG")\n"
-                        "\tjne\t\t.L%ld\n"
-                        ".L%ld:\n",
+                        "\tjne\t\t.L%u\n"
+                        ".L%u:\n",
                         t.m_idx,
                         m_t->m_idx);
             }
