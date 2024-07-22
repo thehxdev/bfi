@@ -16,12 +16,9 @@
 int bf_execute(BF_TokenList *tlp) {
     long i, ptr = 0;
     ubyte arr[__BF_ARR_CAP] = { 0 };
-    register BF_Token *tks = tlp->tokens, t = *tks;
+    BF_Token *tks = tlp->tokens, t = *tks;
 
-    while (1) {
-        if (t.repeat == 0)
-            break;
-
+    while (t.repeat > 0) {
         switch (t.op) {
             case '>':
                 ptr += t.repeat; break;
