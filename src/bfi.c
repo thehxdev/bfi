@@ -43,6 +43,7 @@ static size_t __bf_source_file_cmds_count(FILE *fp) {
 static int __bf_read_source_file(char **buff, size_t *len, const char *path) {
     char ch;
     size_t i = 0;
+    int err = 0;
     FILE *fp = fopen(path, "rb");
     if (!fp) {
         BF_LOG_ERR("Could not open source file: ", NULL);
@@ -54,7 +55,8 @@ static int __bf_read_source_file(char **buff, size_t *len, const char *path) {
     *buff = (char*) calloc((*len) + 1, 1);
     if (!(*buff)) {
         BF_LOG_ERR("Allocating memory for BF commands failed\n", NULL);
-        return 1;
+        err = 1;
+        goto ret;
     }
 
     while ((ch = fgetc(fp)) != EOF) {
@@ -70,6 +72,7 @@ static int __bf_read_source_file(char **buff, size_t *len, const char *path) {
         }
     }
 
+ret:
     fclose(fp);
     return 0;
 }
