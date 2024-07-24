@@ -17,6 +17,7 @@
 
 /* each command is represented by it's own ascii code */
 enum __BF_CMD {
+    CMD_EXIT    = 0,
     CMD_INC_DP  = '>',
     CMD_DEC_DP  = '<',
     CMD_INC_VAL = '+',

@@ -61,7 +61,7 @@ static int __bf_tokenlist_add_null(BF_TokenList *bf_tlp) {
             return 1;
     }
 
-    bf_tlp->tokens[bf_tlp->len] = (BF_Token) { 0 };
+    bf_tlp->tokens[bf_tlp->len] = (BF_Token) { .op = 0, };
     return 0;
 }
 

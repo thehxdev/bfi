@@ -18,7 +18,7 @@ int bf_execute(BF_Token *tlp) {
     ubyte arr[__BF_ARR_CAP] = { 0 };
     BF_Token *tks = tlp, t = *tks;
 
-    while (t.repeat > 0) {
+    while (1) {
         switch (t.op) {
             case '>':
                 ptr += t.repeat; break;
@@ -46,13 +46,16 @@ int bf_execute(BF_Token *tlp) {
 
             case '[':
                 if (arr[ptr] == 0)
-                    tks = &(tlp[t.m_idx]);
+                    tks = tlp+t.m_idx;
                 break;
 
             case ']':
                 if (arr[ptr] != 0)
-                    tks = &(tlp[t.m_idx]);
+                    tks = tlp+t.m_idx;
                 break;
+
+            case CMD_EXIT:
+                goto exit;
 
 #ifdef SAFE_BFI
             default:
@@ -71,5 +74,6 @@ int bf_execute(BF_Token *tlp) {
         t = *(++tks);
     } /* End while(*tsk) */
 
+exit:
     return 0;
 }
