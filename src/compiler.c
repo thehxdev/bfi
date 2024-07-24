@@ -41,8 +41,6 @@ int bf_compiler_x64gcc(BF_Token *tlp, const char *out_path) {
             );
 
     while (1) {
-        if (t.repeat == 0)
-            break;
         switch (t.op) {
             case CMD_INC_DP: {
                 if (t.repeat == 1)
@@ -115,10 +113,14 @@ int bf_compiler_x64gcc(BF_Token *tlp, const char *out_path) {
                         m_t->m_idx);
             }
             break;
+
+            case CMD_EXIT:
+                goto exit;
         } /* end switch(t->op) */
         t = *(++tks);
     } /* end while (t) */
 
+exit:
     fprintf(fp,
             "_exit:\n\t"
             "movq\t-8(%%rbp), %%rdi\n\t"
