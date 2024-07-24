@@ -8,10 +8,10 @@
 #define BF_GEN_REG "r15"
 
 
-int bf_compiler_x64gcc(BF_TokenList *tlp, const char *out_path) {
+int bf_compiler_x64gcc(BF_Token *tlp, const char *out_path) {
     FILE *fp;
     size_t i;
-    register BF_Token *tks = tlp->tokens, t = *tks, *m_t;
+    register BF_Token *tks = tlp, t = *tks, *m_t;
 
     if (out_path) {
         fp = fopen(out_path, "w");
@@ -95,7 +95,7 @@ int bf_compiler_x64gcc(BF_TokenList *tlp, const char *out_path) {
             break;
 
             case CMD_JUMP_F: {
-                m_t = &tlp->tokens[t.m_idx];
+                m_t = &tlp[t.m_idx];
                 fprintf(fp,
                         ".L%u:\n"
                         "\tcmpb\t$0, (%%"BF_GEN_REG")\n"
@@ -106,7 +106,7 @@ int bf_compiler_x64gcc(BF_TokenList *tlp, const char *out_path) {
             break;
 
             case CMD_JUMP_B: {
-                m_t = &tlp->tokens[t.m_idx];
+                m_t = &tlp[t.m_idx];
                 fprintf(fp,
                         "\tcmpb\t$0, (%%"BF_GEN_REG")\n"
                         "\tjne\t\t.L%u\n"

@@ -9,14 +9,14 @@
 
 
 /* Capacity of BrainFuck data array */
-#define __BF_ARR_CAP (1<<16)
+#define __BF_ARR_CAP (0x10000)
 
 
 /* execute BF commands */
-int bf_execute(BF_TokenList *tlp) {
-    long i, ptr = 0;
+int bf_execute(BF_Token *tlp) {
+    unsigned int i, ptr = 0;
     ubyte arr[__BF_ARR_CAP] = { 0 };
-    BF_Token *tks = tlp->tokens, t = *tks;
+    BF_Token *tks = tlp, t = *tks;
 
     while (t.repeat > 0) {
         switch (t.op) {
@@ -46,12 +46,12 @@ int bf_execute(BF_TokenList *tlp) {
 
             case '[':
                 if (arr[ptr] == 0)
-                    tks = &(tlp->tokens[t.m_idx]);
+                    tks = &(tlp[t.m_idx]);
                 break;
 
             case ']':
                 if (arr[ptr] != 0)
-                    tks = &(tlp->tokens[t.m_idx]);
+                    tks = &(tlp[t.m_idx]);
                 break;
 
 #ifdef SAFE_BFI

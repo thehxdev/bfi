@@ -37,9 +37,9 @@ int main(int argc, char *argv[]) {
     }
 
     if (run) {
-        err = bf_execute(bf->tl);
+        err = bf_execute(bf->tl->tokens);
     } else if (x64asm)
-        err = bf_compiler_x64gcc(bf->tl, out);
+        err = bf_compiler_x64gcc(bf->tl->tokens, out);
 
 exit:
     bf_deinit(&bf);
