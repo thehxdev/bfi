@@ -74,7 +74,7 @@ static int __bf_read_source_file(char **buff, size_t *len, const char *path) {
 
 ret:
     fclose(fp);
-    return 0;
+    return err;
 }
 
 
