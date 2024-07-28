@@ -17,7 +17,7 @@ endif
 
 ifeq ($(OPTIMIZE), 1)
 	CFLAGS += -O3 -DNDEBUG
-	LDFLAGS += -s
+	LDFLAGS += -s -fno-asynchronous-unwind-tables -fcf-protection=none
 else
 	CFLAGS += -Og -ggdb
 endif
