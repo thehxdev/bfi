@@ -7,7 +7,7 @@ LIBS :=
 SRC_DIR := src
 SRC_FILES := $(wildcard $(SRC_DIR)/*.c)
 OBJ_FILES := $(SRC_FILES:.c=.o)
-BIN := build/bfi
+BIN := bfi
 
 
 ifeq ($(STATIC), 1)
@@ -26,13 +26,11 @@ ifeq ($(SAFE), 1)
 	CFLAGS += -DSAFE_BFI=1
 endif
 
-
 $(BIN): $(OBJ_FILES)
-	@mkdir -p build
 	$(CC) $(LDFLAGS) -o $(BIN) $(OBJ_FILES)
 
 %.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $<
 
 clean:
-	rm -rf $(SRC_DIR)/*.o build
+	rm -rf $(SRC_DIR)/*.o $(BIN)
