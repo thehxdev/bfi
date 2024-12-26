@@ -1,5 +1,7 @@
-CC ?= cc
-CFLAGS := -std=c99 -Wall -Wextra -Wno-unused-result
+CC := clang
+CFLAGS := -std=c99 -Wall -Wextra -Wshadow -Wno-unused-result
+
+LD := ld.lld
 LDFLAGS :=
 LIBS :=
 
@@ -16,8 +18,8 @@ ifeq ($(STATIC), 1)
 endif
 
 ifeq ($(OPTIMIZE), 1)
-	CFLAGS += -O3 -DNDEBUG
-	LDFLAGS += -s -fno-asynchronous-unwind-tables -fcf-protection=none
+	CFLAGS += -O3 -flto -DNDEBUG -march=native
+	LDFLAGS += -fuse-ld=lld -fno-asynchronous-unwind-tables -fcf-protection=none -Wl,-O3,-q
 else
 	CFLAGS += -Og -ggdb
 endif
@@ -27,7 +29,7 @@ ifeq ($(SAFE), 1)
 endif
 
 $(BIN): $(OBJ_FILES)
-	$(CC) $(LDFLAGS) -o $(BIN) $(OBJ_FILES)
+	$(CC) $(LDFLAGS) -o $(BIN) $(OBJ_FILES) $(LIBS)
 
 %.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $<
