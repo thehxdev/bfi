@@ -20,16 +20,16 @@ typedef struct __bf_state {
     size_t cmds_c;
 
     /* a list of tokens */
-    BF_TokenList *tl;
+    BF_TokenList tl;
 } BF_State;
 
 
 /* initialize BF interpreter */
-BF_State *bf_init(const char *s_path);
+BF_State bf_init(const char *s_path);
 
 
 /* deinit BF */
-void bf_deinit(BF_State **bfp);
+void bf_deinit(BF_State *bfp);
 
 
 #endif /* BFI_BFI_H */

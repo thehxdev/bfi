@@ -15,7 +15,7 @@ void usage(void);
 int main(int argc, char *argv[]) {
     int err = 0, run = 0, x64asm = 0;
     char *src = NULL, *out = NULL;
-    BF_State *bf = NULL;
+    BF_State bf = {0};
 
     if (argc == 2) {
         run = 1;
@@ -28,18 +28,17 @@ int main(int argc, char *argv[]) {
     }
     src = argv[1];
 
-
     bf = bf_init(src);
-    if (!bf) {
+    if (!bf.tl.tokens) {
         BF_LOG_ERR("Failed to initialize BFI\n", NULL);
         err = 1;
         goto exit;
     }
 
     if (run) {
-        err = bf_execute(bf->tl->tokens);
+        err = bf_execute(bf.tl.tokens);
     } else if (x64asm)
-        err = bf_compiler_x64gcc(bf->tl->tokens, out);
+        err = bf_compiler_x64gcc(bf.tl.tokens, out);
 
 exit:
     bf_deinit(&bf);

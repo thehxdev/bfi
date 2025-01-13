@@ -108,43 +108,39 @@ static int __bf_check_matching_brackets(char *cmds) {
 }
 
 
-BF_State *bf_init(const char *s_path) {
+BF_State bf_init(const char *s_path) {
     int err;
-    BF_State *bfs = (BF_State*) malloc(sizeof(BF_State));
-    if (!bfs)
-        return NULL;
-
-    bfs->cmds_c = 0;
+    BF_State bfs = {0};
 
     /* read the source file, removed any unnecessary character
      * and store commands to bfs->cmds */
-    err = __bf_read_source_file(&bfs->cmds, &bfs->cmds_c, s_path);
+    err = __bf_read_source_file(&bfs.cmds, &bfs.cmds_c, s_path);
     if (err)
-        return NULL;
+        goto ret;
 
-    err = __bf_check_matching_brackets(bfs->cmds);
+    err = __bf_check_matching_brackets(bfs.cmds);
     if (err)
-        return NULL;
+        goto ret;
 
     /* tokenize the commands */
-    bfs->tl = __bf_scan_cmds(bfs->cmds, bfs->cmds_c);
-    if (!bfs->tl) {
+    bfs.tl = __bf_scan_cmds(bfs.cmds, bfs.cmds_c);
+    if (!bfs.tl.tokens) {
         BF_LOG_ERR("Scanning BF commands failed\n", NULL);
-        return NULL;
+        goto ret;
     }
 
     /* after scanning commands to tokens, we don't need
      * them anymore */
-    xfree(bfs->cmds);
+    xfree(bfs.cmds);
+
+ret:
     return bfs;
 }
 
 
-void bf_deinit(BF_State **bfp) {
-    BF_State *tmp = *bfp;
-    if (tmp) {
-        xfree(tmp->cmds);
-        __bf_tokenlist_free(tmp->tl);
-        xfree(tmp);
+void bf_deinit(BF_State *bfp) {
+    if (bfp) {
+        xfree(bfp->cmds);
+        xfree(bfp->tl.tokens);
     }
 }

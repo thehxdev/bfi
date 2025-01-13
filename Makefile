@@ -1,5 +1,5 @@
-CC := clang
-CFLAGS := -std=c99 -Wall -Wextra -Wshadow -Wno-unused-result
+CC ?= cc
+CFLAGS += -std=c99 -Wall -Wextra -Wshadow -Wno-unused-result
 
 LD := ld.lld
 LDFLAGS :=
@@ -14,7 +14,7 @@ BIN := bfi
 
 ifeq ($(STATIC), 1)
 	CC := musl-clang
-	LDFLAGS := -static
+	LDFLAGS += -static
 endif
 
 ifeq ($(OPTIMIZE), 1)
@@ -22,6 +22,10 @@ ifeq ($(OPTIMIZE), 1)
 	LDFLAGS += -fuse-ld=lld -fno-asynchronous-unwind-tables -fcf-protection=none -Wl,-O3,-q
 else
 	CFLAGS += -Og -ggdb
+endif
+
+ifeq ($(BRANCHLESS), 1)
+	CFLAGS += -DBFI_BRANCHLESS=1
 endif
 
 ifeq ($(SAFE), 1)

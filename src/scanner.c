@@ -20,21 +20,6 @@ BF_Token __bf_token_new(const char cmd) {
 }
 
 
-/* create a new token list */
-static BF_TokenList *__bf_tokenlist_new(const size_t cap) {
-    BF_TokenList *tl = malloc(sizeof(BF_TokenList));
-    if (!tl)
-        return NULL;
-
-    *tl = (BF_TokenList) {
-        .len = 0,
-        .cap = cap,
-        .tokens = NULL,
-    };
-    return tl;
-}
-
-
 /* append token to token list */
 static int __bf_tokenlist_append(BF_TokenList *bf_tlp, const BF_Token *bf_tp) {
     if (!bf_tlp || !bf_tp)
@@ -110,15 +95,15 @@ char __bf_cmds_get(const char *bf_cmds, const size_t len, const long idx) {
 
 
 /* scan the commands and create a token list */
-BF_TokenList *__bf_scan_cmds(const char *bf_cmds, const size_t len) {
+BF_TokenList __bf_scan_cmds(const char *bf_cmds, const size_t len) {
     size_t i, j;
     long m_idx;
     char curr_c;
     /* m_t -> matching token. used to handle jumps */
     BF_Token tmp_t, *m_t;
-    BF_TokenList *tl = __bf_tokenlist_new(25);
-    if (!tl)
-        return NULL;
+    BF_TokenList tl = (BF_TokenList){
+        .cap = 25,
+    };
 
     for (i = 0; i < len; i++) {
         curr_c = __bf_cmds_get(bf_cmds, len, i);
@@ -128,14 +113,14 @@ BF_TokenList *__bf_scan_cmds(const char *bf_cmds, const size_t len) {
             for (j = i + 1; __bf_cmds_get(bf_cmds, len, j) == curr_c; j++, i++)
                 tmp_t.repeat += 1;
         } else if (curr_c == ']') {
-            m_t = __bf_find_opening_bracket(tl, &m_idx);
-            m_t->m_idx = tl->len;
+            m_t = __bf_find_opening_bracket(&tl, &m_idx);
+            m_t->m_idx = tl.len;
             tmp_t.m_idx = m_idx;
         }
 
-        __bf_tokenlist_append(tl, &tmp_t);
+        __bf_tokenlist_append(&tl, &tmp_t);
     }
 
-    __bf_tokenlist_add_null(tl);
+    __bf_tokenlist_add_null(&tl);
     return tl;
 }

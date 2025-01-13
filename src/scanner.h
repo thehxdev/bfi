@@ -26,6 +26,7 @@ enum __BF_CMD {
     CMD_INPUT   = ',',
     CMD_JUMP_F  = '[', /* jump forward, if data pointer is zero */
     CMD_JUMP_B  = ']', /* jump backward, if data pointer is not zero */
+    CMD_COUNT,
 };
 
 
@@ -53,10 +54,7 @@ typedef struct __bf_tokenlist {
 
 
 /* scan BF commands and create a token list */
-BF_TokenList *__bf_scan_cmds(const char *bf_cmds, const size_t len);
+BF_TokenList __bf_scan_cmds(const char *bf_cmds, const size_t len);
 
-
-/* free a token list */
-void __bf_tokenlist_free(BF_TokenList *bf_tlp);
 
 #endif /* BFI_SCANNER_H */
