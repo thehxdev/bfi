@@ -24,10 +24,6 @@ else
 	CFLAGS += -Og -ggdb
 endif
 
-ifeq ($(BRANCHLESS), 1)
-	CFLAGS += -DBFI_BRANCHLESS=1
-endif
-
 ifeq ($(SAFE), 1)
 	CFLAGS += -DSAFE_BFI=1
 endif
