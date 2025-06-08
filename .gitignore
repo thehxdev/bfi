@@ -8,3 +8,4 @@ a.out
 *.S
 *.ssa
 compile_flags.txt
+bfi
