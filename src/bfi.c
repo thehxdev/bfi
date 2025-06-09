@@ -40,7 +40,7 @@ static size_t __bf_source_file_cmds_count(FILE *fp) {
 /* read a BF source file and remove any unnecessary character.
  * Then write the commands to `**buff` and length of commands
  * to `*len` */
-static int __bf_read_source_file(char **buff, size_t *len, const char *path) {
+static int bf_read_source_file(char **buff, size_t *len, const char *path) {
     char ch;
     size_t i = 0;
     int err = 0;
@@ -80,7 +80,7 @@ ret:
 
 /* check all brackets before execution phase and if there are
  * non-matching ones, report an error and exit */
-static int __bf_check_matching_brackets(char *cmds) {
+static int bf_check_matching_brackets(char *cmds) {
     char c;
     size_t nest = 0;
 
@@ -114,16 +114,16 @@ BF_State bf_init(const char *s_path) {
 
     /* read the source file, removed any unnecessary character
      * and store commands to bfs->cmds */
-    err = __bf_read_source_file(&bfs.cmds, &bfs.cmds_c, s_path);
+    err = bf_read_source_file(&bfs.cmds, &bfs.cmds_c, s_path);
     if (err)
         goto ret;
 
-    err = __bf_check_matching_brackets(bfs.cmds);
+    err = bf_check_matching_brackets(bfs.cmds);
     if (err)
         goto ret;
 
     /* tokenize the commands */
-    bfs.tl = __bf_scan_cmds(bfs.cmds, bfs.cmds_c);
+    bfs.tl = bf_scan_cmds(bfs.cmds, bfs.cmds_c);
     if (!bfs.tl.tokens) {
         BF_LOG_ERR("Scanning BF commands failed\n", NULL);
         goto ret;

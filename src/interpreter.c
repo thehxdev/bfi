@@ -8,13 +8,13 @@
 #endif // SAFE_BFI
 
 /* Capacity of BrainFuck data array */
-#define __BF_ARR_CAP (0x10000)
+#define BF_ARR_CAP (0x10000)
 
 /* execute BF commands */
 int bf_execute(BF_Token *tlp) {
     unsigned int i = 0;
     unsigned int ptr = 0;
-    ubyte arr[__BF_ARR_CAP] = {0};
+    ubyte arr[BF_ARR_CAP] = {0};
     BF_Token *tks, t;
 
     /* init state */

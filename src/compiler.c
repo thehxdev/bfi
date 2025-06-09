@@ -114,7 +114,6 @@ int bf_compiler_x64gcc(BF_Token *tlp, const char *out_path) {
             }
             break;
 
-            case CMD_COUNT:
             case CMD_EXIT:
                 goto exit;
         } /* end switch(t->op) */

@@ -16,7 +16,7 @@
  */
 
 /* each command is represented by it's own ascii code */
-enum __BF_CMD {
+enum BF_CMD {
     CMD_EXIT    = 0,
     CMD_INC_DP  = '>',
     CMD_DEC_DP  = '<',
@@ -26,12 +26,11 @@ enum __BF_CMD {
     CMD_INPUT   = ',',
     CMD_JUMP_F  = '[', /* jump forward, if data pointer is zero */
     CMD_JUMP_B  = ']', /* jump backward, if data pointer is not zero */
-    CMD_COUNT,
 };
 
 
 typedef struct __bf_token {
-    enum __BF_CMD op;
+    int op;
 
     /* how many times a command repeated in a row? */
     unsigned int repeat;
@@ -54,7 +53,7 @@ typedef struct __bf_tokenlist {
 
 
 /* scan BF commands and create a token list */
-BF_TokenList __bf_scan_cmds(const char *bf_cmds, const size_t len);
+BF_TokenList bf_scan_cmds(const char *bf_cmds, const size_t len);
 
 
 #endif /* BFI_SCANNER_H */
