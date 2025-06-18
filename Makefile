@@ -18,8 +18,8 @@ ifeq ($(STATIC), 1)
 endif
 
 ifeq ($(OPTIMIZE), 1)
-	CFLAGS += -O3 -flto -DNDEBUG -march=native
-	LDFLAGS += -fuse-ld=lld -fno-asynchronous-unwind-tables -fcf-protection=none -Wl,-O3,-q
+	CFLAGS += -O3 -DNDEBUG -march=native
+	LDFLAGS += -fuse-ld=lld -flto -fno-asynchronous-unwind-tables -fcf-protection=none -Wl,-O3,-q
 else
 	CFLAGS += -Og -ggdb
 endif
