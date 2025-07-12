@@ -25,8 +25,9 @@ int bf_compiler_x64gcc(BF_Token *tlp, const char *out_path) {
 
     fprintf(fp,
             ".equ\tBF_ARR_LEN, 0x10000\n\n"
-            ".text\n"
-            ".globl main\n\n"
+            "\t.text\n"
+            "\t.globl main\n"
+            "\t.type main, @function\n"
             "main:\n\t"
             "push\t%%rbp\n\t"
             "movq\t%%rsp, %%rbp\n\t"
@@ -107,7 +108,7 @@ exit:
             "_exit:\n\t"
             "leave\n\t"
             "xorq\t%%rax, %%rax\n\t"
-            "retq\n\n"
+            "retq\n"
             ".section .note.GNU-stack,\"\",@progbits\n"
             );
 
