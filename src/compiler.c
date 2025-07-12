@@ -30,47 +30,29 @@ int bf_compiler_x64gcc(BF_Token *tlp, const char *out_path) {
             "main:\n\t"
             "push\t%%rbp\n\t"
             "movq\t%%rsp, %%rbp\n\t"
-            "subq\t$8, %%rsp\n\n\t"
-            "movq\t$BF_ARR_LEN, %%rdi\n\t"
-            "movq\t$1, %%rsi\n\t"
-            "callq\tcalloc\n\t"
-            "movq\t%%rax, -8(%%rbp)\n\t"
-            "cmpq\t$0, %%rax\n\t"
-            "je\t\t_exit\n\t"
-            "movq\t%%rax, %%"BF_GEN_REG"\n\n"
+            "subq\t$BF_ARR_LEN, %%rsp\n\t"
+            "movq\t%%rsp, %%r15\n\n\t"
             );
 
     while (1) {
         switch (t.op) {
             case CMD_INC_DP: {
-                if (t.repeat == 1)
-                    fprintf(fp, "\tincq\t%%"BF_GEN_REG"\n");
-                else
-                    fprintf(fp, "\taddq\t$%u, %%"BF_GEN_REG"\n", t.repeat);
+                fprintf(fp, "\taddq\t$%u, %%"BF_GEN_REG"\n", t.repeat);
             }
             break;
 
             case CMD_DEC_DP: {
-                if (t.repeat == 1)
-                    fprintf(fp, "\tdecq\t%%"BF_GEN_REG"\n");
-                else
-                    fprintf(fp, "\tsubq\t$%u, %%"BF_GEN_REG"\n", t.repeat);
+                fprintf(fp, "\tsubq\t$%u, %%"BF_GEN_REG"\n", t.repeat);
             }
             break;
 
             case CMD_INC_VAL: {
-                if (t.repeat == 1)
-                    fprintf(fp, "\tincb\t(%%"BF_GEN_REG")\n");
-                else
-                    fprintf(fp, "\taddb\t$%u, (%%"BF_GEN_REG")\n", t.repeat);
+                fprintf(fp, "\taddb\t$%u, (%%"BF_GEN_REG")\n", t.repeat);
             }
             break;
 
             case CMD_DEC_VAL: {
-                if (t.repeat == 1)
-                    fprintf(fp, "\tdecb\t(%%"BF_GEN_REG")\n");
-                else
-                    fprintf(fp, "\tsubb\t$%u, (%%"BF_GEN_REG")\n", t.repeat);
+               fprintf(fp, "\tsubb\t$%u, (%%"BF_GEN_REG")\n", t.repeat);
             }
             break;
 
@@ -123,10 +105,8 @@ int bf_compiler_x64gcc(BF_Token *tlp, const char *out_path) {
 exit:
     fprintf(fp,
             "_exit:\n\t"
-            "movq\t-8(%%rbp), %%rdi\n\t"
-            "callq\tfree\n\t"
             "leave\n\t"
-            "movq\t$0, %%rdi\n\t"
+            "xorq\t%%rax, %%rax\n\t"
             "retq\n\n"
             ".section .note.GNU-stack,\"\",@progbits\n"
             );
