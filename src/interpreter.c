@@ -36,12 +36,12 @@ int bf_execute(BF_Token *tlp) {
 
             case '[':
                 if (arr[ptr] == 0)
-                    tks = tlp+t.m_idx;
+                    tks = tlp+t.jmp_idx;
                 break;
 
             case ']':
                 if (arr[ptr] != 0)
-                    tks = tlp+t.m_idx;
+                    tks = tlp+t.jmp_idx;
                 break;
 
             case '.':

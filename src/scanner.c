@@ -15,7 +15,7 @@ BF_Token bf_token_new(const char cmd) {
     return (BF_Token) {
         .op = cmd,
         .repeat = 1,
-        .m_idx = 0,
+        .jmp_idx = 0,
     };
 }
 
@@ -114,8 +114,8 @@ BF_TokenList bf_scan_cmds(const char *bf_cmds, const size_t len) {
                 tmp_t.repeat += 1;
         } else if (curr_c == ']') {
             m_t = bf_find_opening_bracket(&tl, &m_idx);
-            m_t->m_idx = tl.len;
-            tmp_t.m_idx = m_idx;
+            m_t->jmp_idx = tl.len;
+            tmp_t.jmp_idx = m_idx;
         }
 
         bf_tokenlist_append(&tl, &tmp_t);

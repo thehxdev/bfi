@@ -76,24 +76,24 @@ int bf_compiler_x64gcc(BF_Token *tlp, const char *out_path) {
             break;
 
             case CMD_JUMP_F: {
-                m_t = &tlp[t.m_idx];
+                m_t = &tlp[t.jmp_idx];
                 fprintf(fp,
                         ".L%u:\n"
                         "\tcmpb\t$0, (%%"BF_GEN_REG")\n"
                         "\tje\t\t.L%u\n",
-                        m_t->m_idx,
-                        t.m_idx);
+                        m_t->jmp_idx,
+                        t.jmp_idx);
             }
             break;
 
             case CMD_JUMP_B: {
-                m_t = &tlp[t.m_idx];
+                m_t = &tlp[t.jmp_idx];
                 fprintf(fp,
                         "\tcmpb\t$0, (%%"BF_GEN_REG")\n"
                         "\tjne\t\t.L%u\n"
                         ".L%u:\n",
-                        t.m_idx,
-                        m_t->m_idx);
+                        t.jmp_idx,
+                        m_t->jmp_idx);
             }
             break;
 

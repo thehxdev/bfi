@@ -40,12 +40,15 @@ typedef struct __bf_token {
      * each other for constant time jumps.
      * For other commands this will be 0.
      * m_idx -> matching_index */
-    unsigned int m_idx;
+    unsigned int jmp_idx;
 } BF_Token;
 
 
 /* a dynamic array of tokens */
 typedef struct __bf_tokenlist {
+    // int *ops;
+    // unsigned int *reps;
+    // unsigned int *jmp_idxs;
     BF_Token *tokens;
     unsigned int len;
     unsigned int cap;
