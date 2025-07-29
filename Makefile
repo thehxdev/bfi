@@ -1,5 +1,5 @@
 CC ?= cc
-CFLAGS += -std=c99 -Wall -Wextra -Wshadow -Wno-unused-result
+CFLAGS += -std=gnu99 -Wall -Wextra -Wshadow -Wno-unused-result
 
 LD := ld.lld
 LDFLAGS :=
@@ -21,7 +21,7 @@ ifeq ($(OPTIMIZE), 1)
 	CFLAGS += -O3 -DNDEBUG -march=native
 	LDFLAGS += -fuse-ld=lld -flto -fno-asynchronous-unwind-tables -fcf-protection=none -Wl,-O3,-q
 else
-	CFLAGS += -Og -ggdb
+	CFLAGS += -Og -g3
 endif
 
 ifeq ($(SAFE), 1)
