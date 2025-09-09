@@ -24,31 +24,18 @@ enum BF_CMD {
     CMD_DEC_VAL = '-',
     CMD_OUTPUT  = '.',
     CMD_INPUT   = ',',
-    CMD_JUMP_F  = '[', /* jump forward, if data pointer is zero */
-    CMD_JUMP_B  = ']', /* jump backward, if data pointer is not zero */
+    CMD_JUMP_FORWARD  = '[', /* jump forward, if data pointer is zero */
+    CMD_JUMP_BACK     = ']', /* jump backward, if data pointer is not zero */
 };
 
 
 typedef struct __bf_token {
-    int op;
-
-    /* how many times a command repeated in a row? */
-    unsigned int repeat;
-
-    /* to handle '[' and ']' commands,
-     * store the matching ones index in
-     * each other for constant time jumps.
-     * For other commands this will be 0.
-     * m_idx -> matching_index */
-    unsigned int jmp_idx;
+    int op, data;
 } BF_Token;
 
 
 /* a dynamic array of tokens */
 typedef struct __bf_tokenlist {
-    // int *ops;
-    // unsigned int *reps;
-    // unsigned int *jmp_idxs;
     BF_Token *tokens;
     unsigned int len;
     unsigned int cap;
@@ -56,7 +43,7 @@ typedef struct __bf_tokenlist {
 
 
 /* scan BF commands and create a token list */
-BF_TokenList bf_scan_cmds(const char *bf_cmds, const size_t len);
+BF_TokenList *bf_scan_cmds(const char *bf_cmds, const size_t len);
 
 
 #endif /* BFI_SCANNER_H */

@@ -10,7 +10,7 @@
 
 int bf_compiler_x64gcc(BF_Token *tlp, const char *out_path) {
     FILE *fp;
-    size_t i;
+    int i;
     register BF_Token *tks = tlp, t = *tks, *m_t;
 
     if (out_path) {
@@ -38,27 +38,27 @@ int bf_compiler_x64gcc(BF_Token *tlp, const char *out_path) {
     while (1) {
         switch (t.op) {
             case CMD_INC_DP: {
-                fprintf(fp, "\taddq\t$%u, %%"BF_GEN_REG"\n", t.repeat);
+                fprintf(fp, "\taddq\t$%u, %%"BF_GEN_REG"\n", t.data);
             }
             break;
 
             case CMD_DEC_DP: {
-                fprintf(fp, "\tsubq\t$%u, %%"BF_GEN_REG"\n", t.repeat);
+                fprintf(fp, "\tsubq\t$%u, %%"BF_GEN_REG"\n", t.data);
             }
             break;
 
             case CMD_INC_VAL: {
-                fprintf(fp, "\taddb\t$%u, (%%"BF_GEN_REG")\n", t.repeat);
+                fprintf(fp, "\taddb\t$%u, (%%"BF_GEN_REG")\n", t.data);
             }
             break;
 
             case CMD_DEC_VAL: {
-               fprintf(fp, "\tsubb\t$%u, (%%"BF_GEN_REG")\n", t.repeat);
+               fprintf(fp, "\tsubb\t$%u, (%%"BF_GEN_REG")\n", t.data);
             }
             break;
 
             case CMD_OUTPUT: {
-                for (i = 0; i < t.repeat; i++) {
+                for (i = 0; i < t.data; i++) {
                     fprintf(fp,
                             "\tmovb\t(%%"BF_GEN_REG"), %%dil\n"
                             "\tcallq\tputchar\n");
@@ -67,7 +67,7 @@ int bf_compiler_x64gcc(BF_Token *tlp, const char *out_path) {
             break;
 
             case CMD_INPUT: {
-                for (i = 0; i < t.repeat; i++) {
+                for (i = 0; i < t.data; i++) {
                     fprintf(fp,
                             "\tcallq\tgetchar\n"
                             "\tmovb\t(%%"BF_GEN_REG"), %%al\n");
@@ -75,25 +75,25 @@ int bf_compiler_x64gcc(BF_Token *tlp, const char *out_path) {
             }
             break;
 
-            case CMD_JUMP_F: {
-                m_t = &tlp[t.jmp_idx];
+            case CMD_JUMP_FORWARD: {
+                m_t = &tlp[t.data];
                 fprintf(fp,
                         ".L%u:\n"
                         "\tcmpb\t$0, (%%"BF_GEN_REG")\n"
                         "\tje\t\t.L%u\n",
-                        m_t->jmp_idx,
-                        t.jmp_idx);
+                        m_t->data,
+                        t.data);
             }
             break;
 
-            case CMD_JUMP_B: {
-                m_t = &tlp[t.jmp_idx];
+            case CMD_JUMP_BACK: {
+                m_t = &tlp[t.data];
                 fprintf(fp,
                         "\tcmpb\t$0, (%%"BF_GEN_REG")\n"
                         "\tjne\t\t.L%u\n"
                         ".L%u:\n",
-                        t.jmp_idx,
-                        m_t->jmp_idx);
+                        t.data,
+                        m_t->data);
             }
             break;
 

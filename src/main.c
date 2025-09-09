@@ -7,10 +7,9 @@
 #include "compiler.h"
 
 
-#define BFI_VERSION "3.2.0"
+#define BFI_VERSION "3.3.0"
 
 void usage(void);
-
 
 int main(int argc, char *argv[]) {
     int err = 0, run = 0, x64asm = 0;
@@ -29,19 +28,18 @@ int main(int argc, char *argv[]) {
     src = argv[1];
 
     bf = bf_init(src);
-    if (!bf.tl.tokens) {
+    if (!bf.tl->tokens) {
         BF_LOG_ERR("Failed to initialize BFI\n", NULL);
         err = 1;
         goto exit;
     }
 
     if (run)
-        err = bf_execute(bf.tl.tokens);
+        err = bf_execute(bf.tl->tokens);
     else if (x64asm)
-        err = bf_compiler_x64gcc(bf.tl.tokens, out);
+        err = bf_compiler_x64gcc(bf.tl->tokens, out);
 
 exit:
-    bf_deinit(&bf);
     return err;
 }
 
@@ -50,7 +48,7 @@ void usage(void) {
     fprintf(stderr,
             "BFI v" BFI_VERSION " - https://github.com/thehxdev/bfi\n"
             "Usage:\n"
-            "\tInterpreter: bfi <source-code-path>\n"
-            "\tx86 ASM Compiler: bfi <source-code-path> <output-file-path>\n"
+            "\tInterpreter: bfi <source file>\n"
+            "\tx86 ASM Compiler: bfi <source file> <output file>\n"
             );
 }

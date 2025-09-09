@@ -3,7 +3,6 @@
 #include <string.h>
 #include "bfi.h"
 #include "scanner.h"
-#include "xmem.h"
 #include "log.h"
 
 
@@ -124,23 +123,15 @@ BF_State bf_init(const char *s_path) {
 
     /* tokenize the commands */
     bfs.tl = bf_scan_cmds(bfs.cmds, bfs.cmds_c);
-    if (!bfs.tl.tokens) {
+    if (!bfs.tl->tokens) {
         BF_LOG_ERR("Scanning BF commands failed\n", NULL);
         goto ret;
     }
 
     /* after scanning commands to tokens, we don't need
      * them anymore */
-    xfree(bfs.cmds);
+    free(bfs.cmds);
 
 ret:
     return bfs;
-}
-
-
-void bf_deinit(BF_State *bfp) {
-    if (bfp) {
-        xfree(bfp->cmds);
-        xfree(bfp->tl.tokens);
-    }
 }
