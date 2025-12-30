@@ -1,5 +1,5 @@
 CC ?= cc
-CFLAGS += -std=gnu99 -Wall -Wextra -Wshadow -Wno-unused-result
+CFLAGS += -std=gnu99 -Wall -Wextra -Wshadow -Wno-unused-result -Wpadded
 
 LD := ld.lld
 LDFLAGS :=
@@ -27,6 +27,12 @@ endif
 ifeq ($(SAFE), 1)
 	CFLAGS += -DSAFE_BFI=1
 endif
+
+.PHONY: all build clean
+
+all: build
+
+build: $(BIN)
 
 $(BIN): $(OBJ_FILES)
 	$(CC) $(LDFLAGS) -o $(BIN) $(OBJ_FILES) $(LIBS)
